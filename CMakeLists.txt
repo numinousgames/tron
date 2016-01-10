@@ -12,7 +12,8 @@ set(
     SOURCE_FILES
     LICENSE
     README.md
-    game.m.cpp
+    include/engine/memory/iallocator.h
+    src/engine/memory/iallocator.cpp
 )
 
 
@@ -42,7 +43,13 @@ include_directories(
 )
 
 # SUB PROJECTS
-add_subdirectory( ${EXT_DIR}/googletest )
+add_subdirectory(
+        ${EXT_DIR}/googletest
+)
 
 # MAIN EXECUTABLE
-add_executable( tron ${SOURCE_FILES} )
+add_executable(
+        tron
+        game.m.cpp
+        ${SOURCE_FILES}
+)
