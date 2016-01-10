@@ -5,6 +5,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 set(SOURCE_FILES
     LICENSE
-    README.md)
+    README.md game.m.cpp)
 
 add_executable(tron ${SOURCE_FILES})
