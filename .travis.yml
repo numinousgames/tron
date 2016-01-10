@@ -1,0 +1,12 @@
+language:
+  - cpp
+  - python
+
+compiler:
+  - gcc
+  - clang
+
+script:
+  - mkdir build
+  - cd build
+  - cmake ..
