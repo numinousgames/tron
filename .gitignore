@@ -195,5 +195,14 @@ FakesAssemblies/
 # Visual Studio 6 workspace options file
 *.opt
 
+# Visual Studio Files
+*.vcxproj*
+*.sln
+
 # CLion Settings
 .idea
+
+# CMake Files
+CMakeFiles
+CMakeCache.txt
+cmake_install.cmake
