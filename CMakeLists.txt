@@ -18,9 +18,6 @@ elseif( VC )
     set( BUILD_TESTS TRUE )
 endif()
 
-set( BUILD_GTEST ON )
-set( BUILD_GMOCK OFF )
-
 #
 # SOURCE DEFINITIONS
 #
@@ -69,7 +66,7 @@ include_directories(
 
 # SUB PROJECTS
 add_subdirectory(
-    ${EXT_DIR}/googletest
+    ${EXT_DIR}/googletest/googletest
 )
 
 # MAIN EXECUTABLE
