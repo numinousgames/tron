@@ -18,6 +18,9 @@ elseif( VC )
     set( BUILD_TESTS TRUE )
 endif()
 
+set( BUILD_GTEST ON )
+set( BUILD_GMOCK OFF )
+
 #
 # SOURCE DEFINITIONS
 #
