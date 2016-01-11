@@ -11,4 +11,6 @@ script:
   - git submodule update
   - mkdir build
   - cd build
-  - cmake ..
+  - cmake .. -DTRAVIS_CI=TRUE
+  - make
+  - ./all_tests
