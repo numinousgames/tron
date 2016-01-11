@@ -53,7 +53,7 @@ set( TEST_DIR ${PROJECT_SOURCE_DIR}/test )
 # MAIN PROJECT
 #
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 
 # INCLUDES
 include_directories(
