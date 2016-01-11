@@ -1,6 +1,7 @@
 // intdef.h
 #ifndef NGE_INTDEF_H
 #define NGE_INTDEF_H
+
 #include <stdint.h>
 
 namespace nge

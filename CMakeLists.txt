@@ -26,6 +26,8 @@ set(
     SOURCE_FILES
     LICENSE
     README.md
+    include/engine/intdef.h
+    src/engine/intdef.cpp
     include/engine/memory/iallocator.h
     src/engine/memory/iallocator.cpp
     include/engine/memory/default_allocator.h
@@ -60,7 +62,6 @@ include_directories(
     ${INCLUDE_DIR}
     ${SOURCE_DIR}
     ${TEST_DIR}
-    ${EXT_DIR}/googletest/googlemock/include
     ${EXT_DIR}/googletest/googletest/include
 )
 
