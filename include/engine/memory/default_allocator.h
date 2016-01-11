@@ -3,6 +3,7 @@
 #ifndef NGE_MEM_DEFAULT_ALLOCATOR_H
 #define NGE_MEM_DEFAULT_ALLOCATOR_H
 
+#include <assert.h>
 #include "engine/memory/iallocator.h"
 
 namespace nge
@@ -93,6 +94,7 @@ template<typename T>
 inline
 T* DefaultAllocator<T>::get( unsigned int count )
 {
+    assert( count > 0 );
     return new T[count];
 }
 
@@ -100,6 +102,8 @@ template<typename T>
 inline
 void DefaultAllocator<T>::release( T* pointer, unsigned int count )
 {
+    assert( count > 0 );
+    assert( pointer != nullptr );
     delete[] pointer;
 }
 
