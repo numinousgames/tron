@@ -14,8 +14,8 @@ set(
     README.md
     include/engine/memory/iallocator.h
     src/engine/memory/iallocator.cpp
-    include/engine/memory/defaultallocator.h
-    src/engine/memory/defaultallocator.cpp
+    include/engine/memory/default_allocator.h
+    src/engine/memory/default_allocator.cpp
 )
 
 
