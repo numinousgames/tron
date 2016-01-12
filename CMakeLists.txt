@@ -32,6 +32,8 @@ set(
     src/engine/memory/iallocator.cpp
     include/engine/memory/default_allocator.h
     src/engine/memory/default_allocator.cpp
+    include/engine/containers/dynamic_array.h
+    src/engine/containers/dynamic_array.cpp
 )
 
 set(
