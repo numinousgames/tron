@@ -47,7 +47,7 @@ class DefaultAllocator : IAllocator<T>
      * count is less than or equal to zero
      * out of memory
      */
-    virtual T* get( unsigned int count );
+    virtual T* get( uint32 count );
 
     /**
      * Releases the allocation with the given number of instances.
@@ -58,7 +58,7 @@ class DefaultAllocator : IAllocator<T>
      * count is less than or equal to zero
      * out of memory
      */
-    virtual void release( T* pointer, unsigned int count );
+    virtual void release( T* pointer, uint32 count );
 };
 
 //CONSTRUCTORS
@@ -92,7 +92,7 @@ DefaultAllocator<T>& DefaultAllocator<T>::operator =(
 // MEMBER FUNCTIONS
 template<typename T>
 inline
-T* DefaultAllocator<T>::get( unsigned int count )
+T* DefaultAllocator<T>::get( uint32 count )
 {
     assert( count > 0 );
     return new T[count];
@@ -100,7 +100,7 @@ T* DefaultAllocator<T>::get( unsigned int count )
 
 template<typename T>
 inline
-void DefaultAllocator<T>::release( T* pointer, unsigned int count )
+void DefaultAllocator<T>::release( T* pointer, uint32 count )
 {
     assert( count > 0 );
     assert( pointer != nullptr );
