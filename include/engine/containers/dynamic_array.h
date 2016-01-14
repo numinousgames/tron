@@ -905,12 +905,14 @@ bool DynamicArray<T>::has( const T& value ) const
 }
 
 template <typename T>
+inline
 uint32 DynamicArray<T>::size() const
 {
     return _size;
 }
 
 template <typename T>
+inline
 bool DynamicArray<T>::isEmpty() const
 {
     return _size <= 0;
