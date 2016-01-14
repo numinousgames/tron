@@ -1,6 +1,5 @@
 // dynamic_array.t.cpp
 #include <engine/containers/dynamic_array.h>
-#include <engine/memory/default_allocator.h>
 #include <gtest/gtest.h>
 
 TEST( DynamicArrayTest, ConstructionAndAssignment )
