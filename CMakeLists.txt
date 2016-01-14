@@ -42,8 +42,8 @@ set(
 
 set(
     TEST_FILES
-
     test/engine/memory/default_allocator.t.cpp
+    test/engine/containers/dynamic_array.t.cpp
 )
 
 #

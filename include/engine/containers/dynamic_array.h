@@ -220,6 +220,14 @@ class DynamicArray
 
     // MEMBER FUNCTIONS
     /**
+     * Gets the value at the given index.
+     *
+     * Throws a runtime_error when:
+     * index is out of bounds
+     */
+    T& at( uint32 index ) const;
+
+    /**
      * Adds the value to the end of the array.
      */
     void push( const T& value );
@@ -242,12 +250,12 @@ class DynamicArray
     /**
      * Inserts the value at the given index in the array.
      */
-    void insertAt( const T& value, uint32 index );
+    void insertAt( uint32 index, const T& value );
 
     /**
      * Moves the value to the given index in the array.
      */
-    void insertAt( T&& value, uint32 index );
+    void insertAt( uint32 index, T&& value );
 
     /**
      * Removes the value at the back of the array.
@@ -645,6 +653,22 @@ T& DynamicArray<T>::operator[]( uint32 index )
 // MEMBER FUNCTIONS
 template <typename T>
 inline
+T& DynamicArray<T>::at( uint32 index ) const
+{
+    if ( index >= _size )
+    {
+        throw std::runtime_error( "Index is out of bounds!" );
+    }
+    if ( index < _oldSize )
+    {
+        return _oldValues[wrapOld( index )];
+    }
+
+    return _values[wrap( index )];
+}
+
+template <typename T>
+inline
 void DynamicArray<T>::push( const T& value )
 {
     if ( hasMoreToTransfer() )
@@ -717,7 +741,7 @@ void DynamicArray<T>::pushFront( T&& value )
 }
 
 template <typename T>
-void DynamicArray<T>::insertAt( const T& value, uint32 index )
+void DynamicArray<T>::insertAt( uint32 index, const T& value )
 {
     if ( index > _size )
     {
@@ -740,7 +764,7 @@ void DynamicArray<T>::insertAt( const T& value, uint32 index )
 }
 
 template <typename T>
-void DynamicArray<T>::insertAt( T&& value, uint32 index )
+void DynamicArray<T>::insertAt( uint32 index, T&& value )
 {
     if ( index > _size )
     {
@@ -834,6 +858,7 @@ template <typename T>
 void DynamicArray<T>::clear()
 {
     _size = 0;
+    _first = 0;
 
     if ( _oldValues != nullptr )
     {
@@ -945,9 +970,9 @@ void DynamicArray<T>::shiftForward( uint32 start )
     }
 
     uint32 i;
-    for ( i = _size - start - 1; i >= 0; --i )
+    for ( i = ( _size - start ) - 1; i != static_cast<uint32>( -1 ); --i )
     {
-        _values[start + i + 1] = std::move( _values[start + i] );
+        _values[wrap( i + 1 )] = std::move( wrap( _values[start + i] ) );
     }
 }
 

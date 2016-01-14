@@ -13,7 +13,7 @@ namespace mem
 {
 
 template <typename T>
-class DefaultAllocator : IAllocator<T>
+class DefaultAllocator : public IAllocator<T>
 {
   public:
     // CONSTRUCTORS
