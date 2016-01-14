@@ -4,6 +4,7 @@
 #define NGE_MEM_DEFAULT_ALLOCATOR_H
 
 #include <assert.h>
+
 #include "engine/memory/iallocator.h"
 
 namespace nge
