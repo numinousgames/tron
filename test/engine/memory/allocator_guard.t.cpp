@@ -2,7 +2,7 @@
 #include <engine/memory/allocator_guard.h>
 #include <gtest/gtest.h>
 
-TEST( AllocatorGuardTest, Construction )
+TEST( AllocatorGuard, Construction )
 {
     using namespace nge::mem;
 
@@ -17,7 +17,7 @@ TEST( AllocatorGuardTest, Construction )
     EXPECT_EQ( &test, guard2.allocator() );
 }
 
-TEST( AllocatorGuardTest, Usage )
+TEST( AllocatorGuard, Usage )
 {
     using namespace nge::mem;
 
