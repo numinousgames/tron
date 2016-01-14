@@ -660,7 +660,7 @@ T& DynamicArray<T>::at( uint32 index ) const
     {
         throw std::runtime_error( "Index is out of bounds!" );
     }
-    if ( index < _oldSize )
+    if ( index < _oldSize && index >= _oldCopyPos )
     {
         return _oldValues[wrapOld( index )];
     }
