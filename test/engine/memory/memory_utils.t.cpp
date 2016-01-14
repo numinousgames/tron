@@ -2,7 +2,7 @@
 #include <engine/memory/memory_utils.h>
 #include <gtest/gtest.h>
 
-TEST( MemoryUtilsTest, All )
+TEST( MemoryUtils, All )
 {
     using namespace nge::mem;
 

@@ -2,7 +2,7 @@
 #include <engine/containers/dynamic_array.h>
 #include <gtest/gtest.h>
 
-TEST( DynamicArrayTest, ConstructionAndAssignment )
+TEST( DynamicArray, ConstructionAndAssignment )
 {
     using namespace nge;
     using namespace nge::cntr;
@@ -18,7 +18,7 @@ TEST( DynamicArrayTest, ConstructionAndAssignment )
     def = copy;
 }
 
-TEST( DynamicArrayTest, PushAndPop )
+TEST( DynamicArray, PushAndPop )
 {
     using namespace nge;
     using namespace nge::cntr;
@@ -93,7 +93,7 @@ TEST( DynamicArrayTest, PushAndPop )
     EXPECT_EQ( 10,  array[array.size() - 1] );
 }
 
-TEST( DynamicArrayTest, At )
+TEST( DynamicArray, At )
 {
     using namespace nge;
     using namespace nge::cntr;
@@ -117,7 +117,7 @@ TEST( DynamicArrayTest, At )
     EXPECT_THROW( array.at( 65 ), std::runtime_error );
 }
 
-TEST( DynamicArrayTest, InsertAndRemove )
+TEST( DynamicArray, InsertAndRemove )
 {
     using namespace nge;
     using namespace nge::cntr;
