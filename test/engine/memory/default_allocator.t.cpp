@@ -1,6 +1,6 @@
 // default_allocator.t.cpp
-#include <gtest/gtest.h>
 #include <engine/memory/default_allocator.h>
+#include <gtest/gtest.h>
 
 TEST( DefaultAllocator, Construction )
 {

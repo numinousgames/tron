@@ -1,6 +1,6 @@
 // allocator_guard.t.cpp
-#include <gtest/gtest.h>
 #include <engine/memory/allocator_guard.h>
+#include <gtest/gtest.h>
 
 TEST( AllocatorGuardTest, Construction )
 {
