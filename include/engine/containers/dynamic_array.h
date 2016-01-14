@@ -41,7 +41,6 @@ class DynamicArray
     /**
      * The allocator.
      */
-    // todo: replace with AllocatorGuard, see gdev implementation
     mem::AllocatorGuard<T> _allocator;
 
     /**
