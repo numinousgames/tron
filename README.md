@@ -75,5 +75,5 @@ the VC++ tool chain.
 
 
 [Standards]: http://bit.ly/1J4g51q
-[Travis Badge]: https://travis-ci.org/numinousgames/tron.svg?branch=containers
+[Travis Badge]: https://travis-ci.org/numinousgames/tron.svg?branch=master
 [Travis Link]: https://travis-ci.org/numinousgames/tron
