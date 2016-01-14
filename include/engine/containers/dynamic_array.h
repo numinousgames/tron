@@ -625,11 +625,12 @@ DynamicArray<T>& DynamicArray<T>::operator=( cntr::DynamicArray<T>&& array )
 }
 
 template <typename T>
+inline
 const T& DynamicArray<T>::operator[]( uint32 index ) const
 {
     assert( index < _size );
 
-    if ( index < _oldSize )
+    if ( index < _oldSize && index >= _oldCopyPos )
     {
         return _oldValues[wrapOld( index )];
     }
@@ -638,11 +639,12 @@ const T& DynamicArray<T>::operator[]( uint32 index ) const
 }
 
 template <typename T>
+inline
 T& DynamicArray<T>::operator[]( uint32 index )
 {
     assert( index < _size );
 
-    if ( index < _oldSize )
+    if ( index < _oldSize && index >= _oldCopyPos )
     {
         return _oldValues[wrapOld( index )];
     }

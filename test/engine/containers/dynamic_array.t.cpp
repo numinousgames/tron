@@ -5,31 +5,33 @@
 
 TEST( DynamicArrayTest, ConstructionAndAssignment )
 {
+    using namespace nge;
     using namespace nge::cntr;
     using namespace nge::mem;
 
-    DefaultAllocator<int> alloc;
+    DefaultAllocator<int32> alloc;
 
-    DynamicArray<int> array( &alloc );
-    DynamicArray<int> copy( array );
-    DynamicArray<int> capacity( &alloc, ( unsigned int )100 );
-    DynamicArray<int> def;
+    DynamicArray<int32> array( &alloc );
+    DynamicArray<int32> copy( array );
+    DynamicArray<int32> capacity( &alloc, static_cast<uint32>( 100 ) );
+    DynamicArray<int32> def;
 
     def = copy;
 }
 
 TEST( DynamicArrayTest, PushAndPop )
 {
+    using namespace nge;
     using namespace nge::cntr;
     using namespace nge::mem;
 
-    constexpr nge::uint32 SIZE = 1024;
+    constexpr uint32 SIZE = 1024;
 
-    int i;
-    int tmp;
+    int32 i;
+    int32 tmp;
 
-    DefaultAllocator<int> alloc;
-    DynamicArray<int> array( &alloc );
+    DefaultAllocator<int32> alloc;
+    DynamicArray<int32> array( &alloc );
 
     // push
     array.push( 0 );
@@ -37,6 +39,10 @@ TEST( DynamicArrayTest, PushAndPop )
 
     array.push( 32 );
     EXPECT_EQ( 32, array[1] );
+
+    array.clear();
+    EXPECT_EQ( 0, array.size() );
+    EXPECT_TRUE( array.isEmpty() );
 
     for ( i = 0; i < SIZE; ++i )
     {
@@ -46,11 +52,21 @@ TEST( DynamicArrayTest, PushAndPop )
 
     for ( i = 0; i < SIZE; ++i )
     {
+        ASSERT_EQ( i + 12, array[i] );
+    }
+
+    for ( i = 0; i < SIZE; ++i )
+    {
         array.pushFront( i + 69 );
         ASSERT_EQ( i + 69,  array[0] );
     }
 
-    EXPECT_EQ( SIZE * 2 + 2, array.size());
+    for ( i = 0; i < SIZE; ++i )
+    {
+        ASSERT_EQ( i + 69, array[SIZE - i - 1] );
+    }
+
+    EXPECT_EQ( SIZE * 2, array.size());
 
     // pop
     while ( array.size() > 0 )
@@ -67,11 +83,12 @@ TEST( DynamicArrayTest, PushAndPop )
     }
 
     // mix
-    for ( i = 0; i < 35; ++i )
+    for ( i = 0; i < SIZE; ++i )
     {
         array.pushFront( i + 69 );
         ASSERT_EQ( i + 69, array[0] );
     }
+
     array.popFront();
     array.push( 10 );
     EXPECT_EQ( 10,  array[array.size() - 1] );
@@ -79,13 +96,14 @@ TEST( DynamicArrayTest, PushAndPop )
 
 TEST( DynamicArrayTest, At )
 {
+    using namespace nge;
     using namespace nge::cntr;
     using namespace nge::mem;
 
-    int i;
+    int32 i;
 
-    DefaultAllocator<int> alloc;
-    DynamicArray<int> array( &alloc );
+    DefaultAllocator<int32> alloc;
+    DynamicArray<int32> array( &alloc );
 
     for ( i = 0; i < 64; ++i )
     {
@@ -102,28 +120,31 @@ TEST( DynamicArrayTest, At )
 
 TEST( DynamicArrayTest, InsertAndRemove )
 {
+    using namespace nge;
     using namespace nge::cntr;
     using namespace nge::mem;
 
-    unsigned int i;
-    unsigned int tmp;
+    constexpr uint32 SIZE = 1024;
 
-    DefaultAllocator<unsigned int> alloc;
-    DynamicArray<unsigned int> array( &alloc );
+    uint32 i;
+    uint32 tmp;
+
+    DefaultAllocator<uint32> alloc;
+    DynamicArray<uint32> array( &alloc );
 
     // force wrap
     array.push( 0 );
     array.popFront();
     array.push( 0 );
 
-    for ( i = 0; i < 128; ++i )
+    for ( i = 0; i < SIZE; ++i )
     {
         tmp = ( i * 2 ) % ( array.size() + 1 );
         array.insertAt( tmp, i );
         ASSERT_EQ( i, array.at( tmp ) );
     }
 
-    for ( i = 0; i < 128; ++i)
+    for ( i = 0; i < SIZE; ++i)
     {
         tmp = array[( i * 2 ) % array.size()];
         ASSERT_EQ( tmp, array.removeAt( ( i * 2 ) % array.size() ) );
