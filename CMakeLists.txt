@@ -14,8 +14,22 @@ set(
     README.md
     include/engine/memory/iallocator.h
     src/engine/memory/iallocator.cpp
+<<<<<<< Updated upstream
 )
 
+=======
+    include/engine/memory/default_allocator.h
+    src/engine/memory/default_allocator.cpp
+    include/engine/memory/counting_allocator.h
+    src/engine/memory/counting_allocator.cpp
+)
+
+set(
+    TEST_FILES
+
+        test/engine/memory/default_allocator.t.cpp
+        test/engine/memory/counting_allocator.t.cpp)
+>>>>>>> Stashed changes
 
 #
 # CONSTANT DEFINITIONS
