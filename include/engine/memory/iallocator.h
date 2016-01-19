@@ -2,6 +2,8 @@
 #ifndef NGE_MEM_IALLOCATOR_H
 #define NGE_MEM_IALLOCATOR_H
 
+#include "engine/intdef.h"
+
 namespace nge
 {
 
@@ -27,7 +29,7 @@ class IAllocator
      * count is less than or equal to zero
      * out of memory
      */
-    virtual T* get( unsigned int count ) = 0;
+    virtual T* get( uint32 count ) = 0;
 
     /**
      * Releases the allocation with the given number of instances.
@@ -38,7 +40,7 @@ class IAllocator
      * count is less than or equal to zero
      * out of memory
      */
-    virtual void release( T* pointer, unsigned int count ) = 0;
+    virtual void release( T* pointer, uint32 count ) = 0;
 };
 
 // CONSTRUCTORS
