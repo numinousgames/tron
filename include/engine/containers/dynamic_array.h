@@ -49,11 +49,6 @@ class DynamicArray
     T* _values;
 
     /**
-     * The old values from before the array was resized.
-     */
-    T* _oldValues;
-
-    /**
      * The index of the first element in the array.
      */
     uint32 _first;
@@ -68,26 +63,6 @@ class DynamicArray
      */
     uint32 _capacity;
 
-    /**
-     * The old first item before the array was resized.
-     */
-    uint32 _oldFirst;
-
-    /**
-     * The old size from before the array was resized.
-     */
-    uint32 _oldSize;
-
-    /**
-     * The old capacity from before the array was resized.
-     */
-    uint32 _oldCapacity;
-
-    /**
-     * The next item to be copied in the old array.
-     */
-    uint32 _oldCopyPos;
-
     // HELPER FUNCTIONS
     /**
      * Doubles the capacity of the array.
@@ -95,14 +70,14 @@ class DynamicArray
     void grow();
 
     /**
-     * Halves the capacity fo the array.
+     * Halves the capacity of the array.
      */
     void shrink();
 
     /**
-     * Transfers some of the old items to the new memory block.
+     * Resizes the array.
      */
-    void transferOld();
+    void resize(uint32 newCapacity);
 
     /**
      * Shifts the given number of items forward one spot starting at the given
@@ -122,16 +97,6 @@ class DynamicArray
     uint32 wrap( uint32 index ) const;
 
     /**
-     * Wraps the index inside of the old circular bounds.
-     */
-    uint32 wrapOld( uint32 index ) const;
-
-    /**
-     * Determines how many items should be copied.
-     */
-    uint32 getCopyCount() const;
-
-    /**
      * Checks if the underlying array should grow.
      */
     bool shouldGrow() const;
@@ -140,11 +105,6 @@ class DynamicArray
      * Checks if the underlying array should shrink.
      */
     bool shouldShrink() const;
-
-    /**
-     * Checks if there are still more old items to transfer.
-     */
-    bool hasMoreToTransfer() const;
 
   public:
     // CONSTRUCTORS
@@ -284,8 +244,8 @@ class DynamicArray
     uint32 indexOf( const T& value ) const;
 
     /**
- * Checks if the array contains the given value.
- */
+     * Checks if the array contains the given value.
+     */
     bool has( const T& value ) const;
 
     /**
@@ -308,9 +268,8 @@ constexpr uint32 DynamicArray<T>::MIN_CAPACITY;
 template <typename T>
 inline
 DynamicArray<T>::DynamicArray()
-    : _allocator(), _values( nullptr ), _oldValues( nullptr ), _first( 0 ),
-      _size( 0 ), _capacity( MIN_CAPACITY ), _oldFirst( 0 ), _oldSize( 0 ),
-      _oldCapacity( 0 ), _oldCopyPos( 0 )
+    : _allocator(), _values( nullptr ), _first( 0 ), _size( 0 ),
+      _capacity( MIN_CAPACITY )
 {
     _values = _allocator.get( _capacity );
 }
@@ -318,9 +277,8 @@ DynamicArray<T>::DynamicArray()
 template <typename T>
 inline
 DynamicArray<T>::DynamicArray( mem::IAllocator<T>* allocator )
-    : _allocator( allocator ), _values( nullptr ), _oldValues( nullptr ),
-      _first( 0 ), _size( 0 ), _capacity( MIN_CAPACITY ), _oldFirst( 0 ),
-      _oldSize( 0 ), _oldCapacity( 0 ), _oldCopyPos( 0 )
+    : _allocator( allocator ), _values( nullptr ), _first( 0 ),
+      _size( 0 ), _capacity( MIN_CAPACITY )
 {
     _values = _allocator.get( _capacity );
 }
@@ -328,9 +286,8 @@ DynamicArray<T>::DynamicArray( mem::IAllocator<T>* allocator )
 template <typename T>
 inline
 DynamicArray<T>::DynamicArray( uint32 capacity )
-    : _allocator(), _values( nullptr ), _oldValues( nullptr ),
-      _first( 0 ), _size( 0 ), _capacity( MIN_CAPACITY ), _oldFirst( 0 ),
-      _oldSize( 0 ), _oldCapacity( 0 ), _oldCopyPos( 0 )
+    : _allocator(), _values( nullptr ), _first( 0 ), _size( 0 ),
+      _capacity( MIN_CAPACITY )
 {
     while ( _capacity < capacity )
     {
@@ -343,9 +300,8 @@ DynamicArray<T>::DynamicArray( uint32 capacity )
 template <typename T>
 inline
 DynamicArray<T>::DynamicArray( mem::IAllocator<T>* allocator, uint32 capacity )
-    : _allocator( allocator ), _values( nullptr ), _oldValues( nullptr ),
-      _first( 0 ), _size( 0 ), _capacity( MIN_CAPACITY ), _oldFirst( 0 ),
-      _oldSize( 0 ), _oldCapacity( 0 ), _oldCopyPos( 0 )
+    : _allocator( allocator ), _values( nullptr ), _first( 0 ),
+      _size( 0 ), _capacity( MIN_CAPACITY )
 {
     while ( _capacity < capacity )
     {
@@ -357,11 +313,8 @@ DynamicArray<T>::DynamicArray( mem::IAllocator<T>* allocator, uint32 capacity )
 
 template <typename T>
 DynamicArray<T>::DynamicArray( const DynamicArray<T>& array )
-    : _allocator( array._allocator ), _values( nullptr ),
-      _oldValues( nullptr ), _first( 0 ), _size( array._size ),
-      _capacity( array._capacity ), _oldFirst( 0 ),
-      _oldSize( array._oldSize ), _oldCapacity( array._oldCapacity ),
-      _oldCopyPos( array._oldCopyPos )
+    : _allocator( array._allocator ), _values( nullptr ), _first( 0 ),
+      _size( array._size ), _capacity( array._capacity )
 {
     using namespace mem;
 
@@ -384,34 +337,12 @@ DynamicArray<T>::DynamicArray( const DynamicArray<T>& array )
             MemoryUtils::copy( _values + a, array._values, b );
         }
     }
-
-    if ( array._oldValues != nullptr )
-    {
-        _oldValues = _allocator.get( _oldCapacity );
-        a = array._oldCapacity - ( array._oldFirst + array._oldSize );
-        b = ( array._oldFirst + array._oldSize ) % array._oldCapacity;
-
-        if ( a >= array._oldSize )
-        {
-            MemoryUtils::copy( _oldValues, array._oldValues + array._oldFirst,
-                  array._oldSize );
-        }
-        else
-        {
-            MemoryUtils::copy( _oldValues, array._oldValues + array._oldFirst,
-                               a );
-            MemoryUtils::copy( _oldValues + a, array._oldValues, b );
-        }
-    }
 }
 
 template <typename T>
 DynamicArray<T>::DynamicArray( DynamicArray<T>&& array )
-    : _allocator( array._allocator ), _values( nullptr ),
-      _oldValues( nullptr ), _first( 0 ), _size( array._size ),
-      _capacity( array._capacity ), _oldFirst( 0 ),
-      _oldSize( array._oldSize ), _oldCapacity( array._oldCapacity ),
-      _oldCopyPos( array._oldCopyPos )
+    : _allocator( array._allocator ), _values( nullptr ), _first( 0 ),
+      _size( array._size ), _capacity( array._capacity )
 {
     using namespace mem;
 
@@ -435,35 +366,11 @@ DynamicArray<T>::DynamicArray( DynamicArray<T>&& array )
         }
     }
 
-    if ( array._oldValues != nullptr )
-    {
-        _oldValues = _allocator.get( _oldCapacity );
-        a = array._oldCapacity - ( array._oldFirst + array._oldSize );
-        b = ( array._oldFirst + array._oldSize ) % array._oldCapacity;
-
-        if ( a >= array._oldSize )
-        {
-            MemoryUtils::move( _oldValues, array._oldValues + array._oldFirst,
-                  array._oldSize );
-        }
-        else
-        {
-            MemoryUtils::move( _oldValues, array._oldValues + array._oldFirst,
-                               a );
-            MemoryUtils::move( _oldValues + a, array._oldValues, b );
-        }
-    }
-
     array._allocator = nullptr;
     array._values = nullptr;
-    array._oldValues = nullptr;
     array._first = 0;
     array._size = 0;
     array._capacity = 0;
-    array._oldFirst = 0;
-    array._oldSize = 0;
-    array._oldCapacity = 0;
-    array._oldCopyPos = 0;
 }
 
 template <typename T>
@@ -474,13 +381,7 @@ DynamicArray<T>::~DynamicArray()
         _allocator.release( _values, _capacity );
     }
 
-    if ( _oldValues != nullptr )
-    {
-        _allocator.release( _oldValues, _oldCapacity );
-    }
-
     _values = nullptr;
-    _oldValues = nullptr;
     _allocator = nullptr;
 }
 
@@ -496,21 +397,11 @@ DynamicArray<T>& DynamicArray<T>::operator=(
         _allocator.release( _values, _capacity );
     }
 
-    if ( _oldValues != nullptr )
-    {
-        _allocator.release( _oldValues, _oldCapacity );
-    }
-
     _allocator = array._allocator;
     _values = nullptr;
-    _oldValues = nullptr;
     _first = 0;
     _size = array._size;
     _capacity = array._capacity;
-    _oldFirst = 0;
-    _oldSize = array._oldSize;
-    _oldCapacity = array._oldCapacity;
-    _oldCopyPos = array._oldCopyPos;
 
     uint32 a;
     uint32 b;
@@ -532,25 +423,6 @@ DynamicArray<T>& DynamicArray<T>::operator=(
         }
     }
 
-    if ( array._oldValues != nullptr )
-    {
-        _oldValues = _allocator.get( _oldCapacity );
-        a = array._oldCapacity - ( array._oldFirst + array._oldSize );
-        b = ( array._oldFirst + array._oldSize ) % array._oldCapacity;
-
-        if ( a >= array._oldSize )
-        {
-            MemoryUtils::copy( _oldValues, array._oldValues + array._oldFirst,
-                  array._oldSize );
-        }
-        else
-        {
-            MemoryUtils::copy( _oldValues, array._oldValues + array._oldFirst,
-                               a );
-            MemoryUtils::copy( _oldValues + a, array._oldValues, b );
-        }
-    }
-
     return *this;
 }
 
@@ -561,14 +433,9 @@ DynamicArray<T>& DynamicArray<T>::operator=( cntr::DynamicArray<T>&& array )
 
     _allocator = array._allocator;
     _values = nullptr;
-    _oldValues = nullptr;
     _first = 0;
     _size = array._size;
     _capacity = array._capacity;
-    _oldFirst = 0;
-    _oldSize = array._oldSize;
-    _oldCapacity = array._oldCapacity;
-    _oldCopyPos = array._oldCopyPos;
 
     uint32 a;
     uint32 b;
@@ -590,35 +457,11 @@ DynamicArray<T>& DynamicArray<T>::operator=( cntr::DynamicArray<T>&& array )
         }
     }
 
-    if ( array._oldValues != nullptr )
-    {
-        _oldValues = _allocator.get( _oldCapacity );
-        a = array._oldCapacity - ( array._oldFirst + array._oldSize );
-        b = ( array._oldFirst + array._oldSize ) % array._oldCapacity;
-
-        if ( a >= array._oldSize )
-        {
-            MemoryUtils::move( _oldValues, array._oldValues + array._oldFirst,
-                  array._oldSize );
-        }
-        else
-        {
-            MemoryUtils::move( _oldValues, array._oldValues + array._oldFirst,
-                               a );
-            MemoryUtils::move( _oldValues + a, array._oldValues, b );
-        }
-    }
-
     array._allocator = nullptr;
     array._values = nullptr;
-    array._oldValues = nullptr;
     array._first = 0;
     array._size = 0;
     array._capacity = 0;
-    array._oldFirst = 0;
-    array._oldSize = 0;
-    array._oldCapacity = 0;
-    array._oldCopyPos = 0;
 
     return *this;
 }
@@ -628,12 +471,6 @@ inline
 const T& DynamicArray<T>::operator[]( uint32 index ) const
 {
     assert( index < _size );
-
-    if ( index < _oldSize && index >= _oldCopyPos )
-    {
-        return _oldValues[wrapOld( index )];
-    }
-
     return _values[wrap( index )];
 }
 
@@ -642,12 +479,6 @@ inline
 T& DynamicArray<T>::operator[]( uint32 index )
 {
     assert( index < _size );
-
-    if ( index < _oldSize && index >= _oldCopyPos )
-    {
-        return _oldValues[wrapOld( index )];
-    }
-
     return _values[wrap( index )];
 }
 
@@ -660,11 +491,6 @@ T& DynamicArray<T>::at( uint32 index ) const
     {
         throw std::runtime_error( "Index is out of bounds!" );
     }
-    
-    if ( index < _oldSize && index >= _oldCopyPos )
-    {
-        return _oldValues[wrapOld( index )];
-    }
 
     return _values[wrap( index )];
 }
@@ -673,11 +499,6 @@ template <typename T>
 inline
 void DynamicArray<T>::push( const T& value )
 {
-    if ( hasMoreToTransfer() )
-    {
-        transferOld();
-    }
-
     if ( shouldGrow() )
     {
         grow();
@@ -691,11 +512,6 @@ template <typename T>
 inline
 void DynamicArray<T>::push( T&& value )
 {
-    if ( hasMoreToTransfer() )
-    {
-        transferOld();
-    }
-
     if ( shouldGrow() )
     {
         grow();
@@ -709,17 +525,12 @@ template <typename T>
 inline
 void DynamicArray<T>::pushFront( const T& value )
 {
-    if ( hasMoreToTransfer() )
-    {
-        transferOld();
-    }
-
     if ( shouldGrow() )
     {
         grow();
     }
 
-    --_first;
+    _first = (_first > 0) ? _first - 1 : _capacity - 1;
     ++_size;
     ( *this )[0] = value;
 }
@@ -727,17 +538,12 @@ void DynamicArray<T>::pushFront( const T& value )
 template <typename T>
 void DynamicArray<T>::pushFront( T&& value )
 {
-    if ( hasMoreToTransfer() )
-    {
-        transferOld();
-    }
-
     if ( shouldGrow() )
     {
         grow();
     }
 
-    --_first;
+    _first = (_first > 0) ? _first - 1 : _capacity - 1;
     ++_size;
     ( *this )[0] = std::move( value );
 }
@@ -748,11 +554,6 @@ void DynamicArray<T>::insertAt( uint32 index, const T& value )
     if ( index > _size )
     {
         throw std::runtime_error( "Index is out of bounds!" );
-    }
-
-    if ( hasMoreToTransfer() )
-    {
-        transferOld();
     }
 
     if ( shouldGrow() )
@@ -773,11 +574,6 @@ void DynamicArray<T>::insertAt( uint32 index, T&& value )
         throw std::runtime_error( "Index is out of bounds!" );
     }
 
-    if ( hasMoreToTransfer() )
-    {
-        transferOld();
-    }
-
     if ( shouldGrow() )
     {
         grow();
@@ -793,11 +589,6 @@ T DynamicArray<T>::pop()
 {
     assert( _size > 0 );
 
-    if ( hasMoreToTransfer() )
-    {
-        transferOld();
-    }
-
     if ( shouldShrink() )
     {
         shrink();
@@ -812,11 +603,6 @@ template <typename T>
 T DynamicArray<T>::popFront()
 {
     assert( _size > 0 );
-
-    if ( hasMoreToTransfer() )
-    {
-        transferOld();
-    }
 
     if ( shouldShrink() )
     {
@@ -839,11 +625,6 @@ T DynamicArray<T>::removeAt( uint32 index )
         throw std::runtime_error( "Index is out of bounds!" );
     }
 
-    if ( hasMoreToTransfer() )
-    {
-        transferOld();
-    }
-
     if ( shouldShrink() )
     {
         shrink();
@@ -861,16 +642,6 @@ void DynamicArray<T>::clear()
 {
     _size = 0;
     _first = 0;
-
-    if ( _oldValues != nullptr )
-    {
-        _allocator.release( _oldValues, _oldCapacity );
-        _oldFirst = 0;
-        _oldSize = 0;
-        _oldCapacity = 9;
-        _oldCopyPos = 0;
-        _oldValues = nullptr;
-    }
 }
 
 template <typename T>
@@ -921,58 +692,45 @@ bool DynamicArray<T>::isEmpty() const
 
 // HELPER FUNCTIONS
 template <typename T>
+inline
 void DynamicArray<T>::grow()
 {
-    assert( _oldValues == nullptr );
-    _oldValues = _values;
-    _oldFirst = _first;
-    _oldSize = _size;
-    _oldCapacity = _capacity;
-    _oldCopyPos = 0;
+    resize(_capacity << 1);
 
-    _capacity <<= 1;
-    _values = _allocator.get( _capacity );
-    _first = 0;
+
 }
 
 template <typename T>
+inline
 void DynamicArray<T>::shrink()
 {
-    assert( _oldValues == nullptr );
+    resize(_capacity >> 1);
 }
 
 template <typename T>
-void DynamicArray<T>::transferOld()
+void DynamicArray<T>::resize( uint32 newCapacity )
 {
-    const uint32 count = getCopyCount();
+    uint32 oldCapacity = _capacity;
+    uint32 oldFirst = _first;
+    T* oldValues = _values;
+
+    _capacity = newCapacity;
+    _values = _allocator.get( _capacity );
+    _first = 0;
 
     uint32 i;
-    for ( i = 0; hasMoreToTransfer() && i < count; ++i, ++_oldCopyPos )
+    for( i = 0; i < _size; ++i)
     {
-        _values[wrap( _oldCopyPos )] =
-            std::move( _oldValues[wrapOld( _oldCopyPos )] );
+        _values[i] = std::move( oldValues[( oldFirst + i ) % oldCapacity] );
     }
 
-    if ( !hasMoreToTransfer() )
-    {
-         _allocator.release( _oldValues, _oldCapacity );
-        _oldValues = nullptr;
-        _oldFirst = 0;
-        _oldSize = 0;
-        _oldCapacity = 0;
-        _oldCopyPos = 0;
-    }
+    _allocator.release( oldValues, oldCapacity );
 }
 
 template <typename T>
 inline
 void DynamicArray<T>::shiftForward( uint32 start )
 {
-    while ( hasMoreToTransfer() )
-    {
-        transferOld();
-    }
-
     uint32 i;
     for ( i = ( _size - start ) - 1; i != static_cast<uint32>( -1 ); --i )
     {
@@ -984,11 +742,6 @@ template <typename T>
 inline
 void DynamicArray<T>::shiftBackward( uint32 start )
 {
-    while ( hasMoreToTransfer() )
-    {
-        transferOld();
-    }
-
     uint32 i;
     for ( i = 0; i < _size - start; ++i )
     {
@@ -1005,53 +758,16 @@ uint32 DynamicArray<T>::wrap( uint32 index ) const
 
 template <typename T>
 inline
-uint32 DynamicArray<T>::wrapOld( uint32 index ) const
-{
-    return ( _oldFirst + index ) % _oldCapacity;
-}
-
-template <typename T>
-inline
-uint32 DynamicArray<T>::getCopyCount() const
-{
-    // Transition  Count   LTH    UTH   ST
-    // 32->64        32     16     64   16  64/4
-    // 64->128       64     32    128   32  128/4
-    // 128->256     128     64    256   64  256/4
-    // 256->512     256    128    512  128  512/4
-    // 512->1024    512    256   1024  256  1024/4
-    // ...
-    // 1024->512    256    128    512  128  512/4
-    // 512->256     128     64    256   64  256/4
-    // 256->128      64     32    128   32  128/4
-    // 128->64       32     16     64   16  64/4
-    // 64->32        16     --     32    8  32/4
-    //
-    // LTH = Lower Threshold, UTH = Upper Threshold, ST = Steps Available
-    //
-    return _size >> 2;
-}
-
-template <typename T>
-inline
 bool DynamicArray<T>::shouldGrow() const
 {
-    return !hasMoreToTransfer() && _size >= _capacity;
+    return _size >= _capacity;
 }
 
 template <typename T>
 inline
 bool DynamicArray<T>::shouldShrink() const
 {
-    return !hasMoreToTransfer() && _size <= ( _capacity << 2 ) &&
-        _capacity > MIN_CAPACITY;
-}
-
-template <typename T>
-inline
-bool DynamicArray<T>::hasMoreToTransfer() const
-{
-    return _oldCopyPos < _oldSize;
+    return _size <= ( _capacity >> 2 ) && _capacity > MIN_CAPACITY;
 }
 
 } // End nspc cntr
