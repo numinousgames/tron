@@ -12,10 +12,12 @@ TEST( DynamicArray, ConstructionAndAssignment )
 
     DynamicArray<int32> array( &alloc );
     DynamicArray<int32> copy( array );
+    DynamicArray<int32> move( std::move( array ) );
     DynamicArray<int32> capacity( &alloc, static_cast<uint32>( 100 ) );
     DynamicArray<int32> def;
 
     def = copy;
+    def = std::move( copy );
 }
 
 TEST( DynamicArray, PushAndPop )
