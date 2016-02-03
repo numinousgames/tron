@@ -260,7 +260,6 @@ class DynamicArray
 };
 
 // CONSTANTS
-
 template <typename T>
 constexpr uint32 DynamicArray<T>::MIN_CAPACITY;
 

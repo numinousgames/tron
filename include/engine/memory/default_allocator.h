@@ -105,6 +105,7 @@ void DefaultAllocator<T>::release( T* pointer, uint32 count )
 {
     assert( count > 0 );
     assert( pointer != nullptr );
+
     delete[] pointer;
 }
 
