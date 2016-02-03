@@ -38,13 +38,17 @@ set(
     include/engine/memory/memory_utils.h
     src/engine/memory/allocator_guard.cpp
     include/engine/memory/allocator_guard.h
+    src/engine/containers/list.cpp
+    include/engine/containers/list.h
 )
 
 set(
     TEST_FILES
     test/engine/memory/default_allocator.t.cpp
     test/engine/containers/dynamic_array.t.cpp
-    test/engine/memory/allocator_guard.t.cpp test/engine/memory/memory_utils.t.cpp )
+    test/engine/memory/allocator_guard.t.cpp
+    test/engine/memory/memory_utils.t.cpp
+    test/engine/containers/list.t.cpp )
 
 #
 # CONSTANT DEFINITIONS
