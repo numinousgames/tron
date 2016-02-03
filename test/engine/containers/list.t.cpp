@@ -33,67 +33,67 @@ TEST( List, PushAndPop )
     int32 tmp;
 
     DefaultAllocator<List<uint32>::Node> alloc;
-    List<uint32> array( &alloc );
+    List<uint32> list( &alloc );
 
     // push
-    array.push( 0 );
-    EXPECT_EQ( 0,  array[0] );
+    list.push( 0 );
+    EXPECT_EQ( 0,  list[0] );
 
-    array.push( 32 );
-    EXPECT_EQ( 32, array[1] );
+    list.push( 32 );
+    EXPECT_EQ( 32, list[1] );
 
-    array.clear();
-    EXPECT_EQ( 0, array.size() );
-    EXPECT_TRUE( array.isEmpty() );
+    list.clear();
+    EXPECT_EQ( 0, list.size() );
+    EXPECT_TRUE( list.isEmpty() );
 
     for ( i = 0; i < SIZE; ++i )
     {
-        array.push( i + 12 );
-        ASSERT_EQ( i + 12, array[array.size() - 1] );
+        list.push( i + 12 );
+        ASSERT_EQ( i + 12, list[list.size() - 1] );
     }
 
     for ( i = 0; i < SIZE; ++i )
     {
-        ASSERT_EQ( i + 12, array[i] );
+        ASSERT_EQ( i + 12, list[i] );
     }
 
     for ( i = 0; i < SIZE; ++i )
     {
-        array.pushFront( i + 69 );
-        ASSERT_EQ( i + 69,  array[0] );
+        list.pushFront( i + 69 );
+        ASSERT_EQ( i + 69,  list[0] );
     }
 
     for ( i = 0; i < SIZE; ++i )
     {
-        ASSERT_EQ( i + 69, array[SIZE - i - 1] );
+        ASSERT_EQ( i + 69, list[SIZE - i - 1] );
     }
 
-    EXPECT_EQ( SIZE * 2, array.size());
+    EXPECT_EQ( SIZE * 2, list.size());
 
     // pop
-    while ( array.size() > 0 )
+    while ( list.size() > 0 )
     {
-        i = array.size();
+        i = list.size();
 
-        tmp = array[array.size() - 1];
-        ASSERT_EQ( tmp, array.pop() );
+        tmp = list[list.size() - 1];
+        ASSERT_EQ( tmp, list.pop() );
 
-        tmp = array[0];
-        ASSERT_EQ( tmp, array.popFront() );
+        tmp = list[0];
+        ASSERT_EQ( tmp, list.popFront() );
 
-        ASSERT_EQ( i - 2, array.size() );
+        ASSERT_EQ( i - 2, list.size() );
     }
 
     // mix
     for ( i = 0; i < SIZE; ++i )
     {
-        array.pushFront( i + 69 );
-        ASSERT_EQ( i + 69, array[0] );
+        list.pushFront( i + 69 );
+        ASSERT_EQ( i + 69, list[0] );
     }
 
-    array.popFront();
-    array.push( 10 );
-    EXPECT_EQ( 10,  array[array.size() - 1] );
+    list.popFront();
+    list.push( 10 );
+    EXPECT_EQ( 10,  list[list.size() - 1] );
 }
 
 TEST( List, At )
@@ -105,19 +105,19 @@ TEST( List, At )
     int32 i;
 
     DefaultAllocator<List<uint32>::Node> alloc;
-    List<int32> array( &alloc );
+    List<int32> list( &alloc );
 
     for ( i = 0; i < 64; ++i )
     {
-        array.push( i );
+        list.push( i );
     }
 
     for ( i = 0; i < 64; ++i )
     {
-        ASSERT_EQ( i, array.at( i ) );
+        ASSERT_EQ( i, list.at( i ) );
     }
 
-    EXPECT_THROW( array.at( 65 ), std::runtime_error );
+    EXPECT_THROW( list.at( 65 ), std::runtime_error );
 }
 
 TEST( List, InsertAndRemove )
@@ -132,23 +132,23 @@ TEST( List, InsertAndRemove )
     uint32 tmp;
 
     DefaultAllocator<List<uint32>::Node> alloc;
-    List<uint32> array( &alloc );
+    List<uint32> list( &alloc );
 
     // force wrap
-    array.push( 0 );
-    array.popFront();
-    array.push( 0 );
+    list.push( 0 );
+    list.popFront();
+    list.push( 0 );
 
     for ( i = 0; i < SIZE; ++i )
     {
-        tmp = ( i * 2 ) % ( array.size() + 1 );
-        array.insertAt( tmp, i );
-        ASSERT_EQ( i, array.at( tmp ) );
+        tmp = ( i * 2 ) % ( list.size() + 1 );
+        list.insertAt( tmp, i );
+        ASSERT_EQ( i, list.at( tmp ) );
     }
 
     for ( i = 0; i < SIZE; ++i)
     {
-        tmp = array[( i * 2 ) % array.size()];
-        ASSERT_EQ( tmp, array.removeAt( ( i * 2 ) % array.size() ) );
+        tmp = list[( i * 2 ) % list.size()];
+        ASSERT_EQ( tmp, list.removeAt( ( i * 2 ) % list.size() ) );
     }
 }

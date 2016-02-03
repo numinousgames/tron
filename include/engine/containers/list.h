@@ -1,4 +1,7 @@
 // list.h
+//
+// Defines a circularly linked list.
+//
 #ifndef NGE_CNTR_LIST_H
 #define NGE_CNTR_LIST_H
 
@@ -17,7 +20,6 @@ namespace nge
 namespace cntr
 {
 
-// TODO: reduce free items when count(free) >= count(all)/4
 template <typename T>
 class List
 {
@@ -123,6 +125,11 @@ class List
 
     /**
      * Gets the internal index of the given index.
+     * <p>
+     * This is designed such that it will iterate through at most
+     * N/2 items changing the direction it iterates depending on the index.
+     * <p>
+     * TODO: check performnce impact due to cache incoherency
      */
     uint32 getNodePos( uint32 index ) const;
 
@@ -608,7 +615,7 @@ inline
 T List<T>::pop()
 {
     assert( _count > 0 );
-    return removeAt( _nodes[_first].prev );
+    return removeAt( _count - 1 );
 }
 
 template <typename T>
@@ -616,7 +623,7 @@ inline
 T List<T>::popFront()
 {
     assert( _count > 0 );
-    return removeAt( _first );
+    return removeAt( 0 );
 }
 
 template <typename T>
@@ -720,6 +727,8 @@ bool List<T>::isEmpty() const
 template <typename T>
 uint32 List<T>::popFreeNodeAndGetPos()
 {
+    assert( _freeCount > 0 );
+
     uint32 pos = _firstFree;
     Node& node = _nodes[pos];
 
@@ -749,7 +758,7 @@ void List<T>::insertAtPos( uint32 index, Node& node )
     uint32 pos = hasFree() ? popFreeNodeAndGetPos() : _count;
 
     // insert node differently depending on position
-    if ( _count > 0 && pos == _count )
+    if ( _count > 0 && index == _count )
     {
         node.prev = _nodes[_first].prev;
         node.next = _first;
@@ -772,7 +781,7 @@ void List<T>::insertAtPos( uint32 index, Node& node )
         _nodes[node.next].prev = pos;
     }
 
-    if ( pos <= 0 )
+    if ( index <= 0 )
     {
         _first = pos;
     }
@@ -818,26 +827,32 @@ void List<T>::resize( uint32 size )
 {
     Node* newList = _alloc.get( size );
 
+    // copy only the items that are in use to the new array
     uint32 i;
-    newList[0].value = ( *this )[0];
+    Node* cur = &getNodeAt( 0 );
+    newList[0].value = std::move( cur->value );
     newList[0].prev = _count - 1;
     newList[0].next = 1;
-    for ( i = 1; i < _count - 1; ++i )
+
+    for ( i = 1, cur = &_nodes[cur->next];
+          i < _count - 1;
+          ++i, cur = &_nodes[cur->next] )
     {
-        newList[i].value = ( *this )[0];
+        newList[i].value = std::move( cur->value );
         newList[i].next = i + 1;
         newList[i].prev = i - 1;
     }
-    newList[_count].value = ( *this )[0];
-    newList[_count].next = 0;
-    newList[_count].prev = _count - 2;
+
+    newList[_count - 1].value = std::move( cur->value );
+    newList[_count - 1].next = 0;
+    newList[_count - 1].prev = _count - 2;
 
     _first = 0;
     _firstFree = 0;
     _freeCount = 0;
 
+    _alloc.release( _nodes, _capacity );
     _capacity = size;
-    _alloc.release( _nodes, _count );
     _nodes = newList;
 }
 
@@ -854,9 +869,22 @@ uint32 List<T>::getNodePos( uint32 index ) const
 {
     assert( index < _count );
     uint32 cur;
-    for ( cur = _first; index > 0; --index )
+
+    // navigate to item in the optimal direction
+    if ( index <= _count / 2 )
     {
-        cur = _nodes[cur].next;
+        for ( cur = _first; index > 0; --index )
+        {
+            cur = _nodes[cur].next;
+        }
+    }
+    else
+    {
+        index = _count - index;
+        for ( cur = _first; index > 0; --index )
+        {
+            cur = _nodes[cur].prev;
+        }
     }
     return cur;
 }
