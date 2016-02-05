@@ -378,9 +378,9 @@ DynamicArray<T>::~DynamicArray()
     if ( _values != nullptr )
     {
         _allocator.release( _values, _capacity );
+        _values = nullptr;
     }
 
-    _values = nullptr;
     _allocator = nullptr;
 }
 
@@ -394,10 +394,10 @@ DynamicArray<T>& DynamicArray<T>::operator=(
     if ( _values != nullptr )
     {
         _allocator.release( _values, _capacity );
+        _values = nullptr;
     }
 
     _allocator = array._allocator;
-    _values = nullptr;
     _first = 0;
     _size = array._size;
     _capacity = array._capacity;
@@ -709,6 +709,7 @@ void DynamicArray<T>::shrink()
 template <typename T>
 void DynamicArray<T>::resize( uint32 newCapacity )
 {
+    assert( _values != nullptr );
     uint32 oldCapacity = _capacity;
     uint32 oldFirst = _first;
     T* oldValues = _values;
@@ -733,7 +734,7 @@ void DynamicArray<T>::shiftForward( uint32 start )
     uint32 i;
     for ( i = ( _size - start ) - 1; i != static_cast<uint32>( -1 ); --i )
     {
-        _values[wrap( i + 1 )] = std::move( wrap( _values[start + i] ) );
+        _values[wrap( i + 1 )] = std::move( wrap( _values[wrap( i )] ) );
     }
 }
 
@@ -742,9 +743,9 @@ inline
 void DynamicArray<T>::shiftBackward( uint32 start )
 {
     uint32 i;
-    for ( i = 0; i < _size - start; ++i )
+    for ( i = 0; i < start; ++i )
     {
-        _values[start + i] = std::move( _values[start + i + 1] );
+        _values[wrap( i )] = std::move( _values[wrap( i + 1 )] );
     }
 }
 
