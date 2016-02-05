@@ -35,7 +35,7 @@ class DefaultAllocator : public IAllocator<T>
 
     //OPERATORS
     /**
-     *Assigns a copy of an allocator.
+     * Assigns a copy of an allocator.
      */
     DefaultAllocator<T>& operator =( const DefaultAllocator<T>& assign );
 
