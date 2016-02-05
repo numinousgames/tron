@@ -26,6 +26,12 @@ struct MemoryUtils
      */
     template <typename T>
     static void move( T* dst, T* src, uint32 count );
+
+    /**
+     * Sets the all of the values in the array to the given value.
+     */
+    template <typename T>
+    static void set( T* ptr, const T& value, uint32 count );
 };
 
 template <typename T>
@@ -45,6 +51,16 @@ void MemoryUtils::move( T* dst, T* src, uint32 count )
     for ( i = 0; i < count; ++i )
     {
         dst[i] = std::move( src[i] );
+    }
+}
+
+template <typename T>
+void MemoryUtils::set( T* ptr, const T& value, uint32 count )
+{
+    uint32 i;
+    for ( i = 0; i < count; ++i )
+    {
+        ptr[i] = value;
     }
 }
 
