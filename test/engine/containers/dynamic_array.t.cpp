@@ -8,13 +8,13 @@ TEST( DynamicArray, ConstructionAndAssignment )
     using namespace nge::cntr;
     using namespace nge::mem;
 
-    DefaultAllocator<int32> alloc;
+    DefaultAllocator<uint32> alloc;
 
-    DynamicArray<int32> array( &alloc );
-    DynamicArray<int32> copy( array );
-    DynamicArray<int32> move( std::move( array ) );
-    DynamicArray<int32> capacity( &alloc, static_cast<uint32>( 100 ) );
-    DynamicArray<int32> def;
+    DynamicArray<uint32> array( &alloc );
+    DynamicArray<uint32> copy( array );
+    DynamicArray<uint32> move( std::move( array ) );
+    DynamicArray<uint32> capacity( &alloc, static_cast<uint32>( 100 ) );
+    DynamicArray<uint32> def;
 
     def = copy;
     def = std::move( copy );
@@ -28,11 +28,11 @@ TEST( DynamicArray, PushAndPop )
 
     constexpr uint32 SIZE = 1024;
 
-    int32 i;
-    int32 tmp;
+    uint32 i;
+    uint32 tmp;
 
-    DefaultAllocator<int32> alloc;
-    DynamicArray<int32> array( &alloc );
+    DefaultAllocator<uint32> alloc;
+    DynamicArray<uint32> array( &alloc );
 
     // push
     array.push( 0 );
@@ -101,10 +101,10 @@ TEST( DynamicArray, At )
     using namespace nge::cntr;
     using namespace nge::mem;
 
-    int32 i;
+    uint32 i;
 
-    DefaultAllocator<int32> alloc;
-    DynamicArray<int32> array( &alloc );
+    DefaultAllocator<uint32> alloc;
+    DynamicArray<uint32> array( &alloc );
 
     for ( i = 0; i < 64; ++i )
     {

@@ -29,8 +29,8 @@ TEST( List, PushAndPop )
 
     constexpr uint32 SIZE = 1024;
 
-    int32 i;
-    int32 tmp;
+    uint32 i;
+    uint32 tmp;
 
     DefaultAllocator<List<uint32>::Node> alloc;
     List<uint32> list( &alloc );
@@ -102,10 +102,10 @@ TEST( List, At )
     using namespace nge::cntr;
     using namespace nge::mem;
 
-    int32 i;
+    uint32 i;
 
     DefaultAllocator<List<uint32>::Node> alloc;
-    List<int32> list( &alloc );
+    List<uint32> list( &alloc );
 
     for ( i = 0; i < 64; ++i )
     {
