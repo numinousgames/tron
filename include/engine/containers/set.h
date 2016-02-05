@@ -517,10 +517,21 @@ void Set<T>::remove( const T& value )
     }
 
     uint32 binIndex = findBinForValue( value );
+    uint32 i;
     if ( !isBinEmpty( binIndex ) )
     {
         --_binsInUse;
         _values.removeAt( _bins[binIndex] );
+
+        // correct bin indices
+        for ( i = 0; i < _binCount; ++i )
+        {
+            if ( !isBinEmpty( i ) && _bins[i] > _bins[binIndex] )
+            {
+                --( _bins[i] );
+            }
+        }
+
         _bins[binIndex] = BIN_EMPTY;
     }
 }

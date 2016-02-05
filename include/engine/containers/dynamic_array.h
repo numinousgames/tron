@@ -593,9 +593,9 @@ T DynamicArray<T>::pop()
         shrink();
     }
 
-    const T& ref = ( *this )[_size - 1];
+    T elem = std::move( ( *this )[_size - 1] );
     --_size;
-    return ref;
+    return elem;
 }
 
 template <typename T>
@@ -608,10 +608,10 @@ T DynamicArray<T>::popFront()
         shrink();
     }
 
-    const T& ref = ( *this )[0];
+    T elem = std::move( ( *this )[0] );
     ++_first;
     --_size;
-    return ref;
+    return elem;
 }
 
 template <typename T>
@@ -629,7 +629,7 @@ T DynamicArray<T>::removeAt( uint32 index )
         shrink();
     }
 
-    T elem = ( *this )[index];
+    T elem = std::move( ( *this )[index] );
     shiftBackward( index );
     --_size;
 
@@ -731,10 +731,12 @@ template <typename T>
 inline
 void DynamicArray<T>::shiftForward( uint32 start )
 {
+    assert( start <= _size );
     uint32 i;
-    for ( i = ( _size - start ) - 1; i != static_cast<uint32>( -1 ); --i )
+    for ( i = _size - start - 1; i != static_cast<uint32>( -1 ); --i )
     {
-        _values[wrap( i + 1 )] = std::move( wrap( _values[wrap( i )] ) );
+        _values[wrap( start + i + 1 )] =
+            std::move( wrap( _values[wrap( start + i )] ) );
     }
 }
 
@@ -742,10 +744,12 @@ template <typename T>
 inline
 void DynamicArray<T>::shiftBackward( uint32 start )
 {
+    assert( start < _size );
     uint32 i;
-    for ( i = 0; i < start; ++i )
+    for ( i = 0; i < _size - start - 1; ++i )
     {
-        _values[wrap( i )] = std::move( _values[wrap( i + 1 )] );
+        _values[wrap( start + i )] =
+            std::move( _values[wrap( start + i + 1 )] );
     }
 }
 
@@ -753,7 +757,7 @@ template <typename T>
 inline
 uint32 DynamicArray<T>::wrap( uint32 index ) const
 {
-    return ( _first + index ) % _capacity;
+    return ( _first + index ) & ( _capacity - 1 );
 }
 
 template <typename T>

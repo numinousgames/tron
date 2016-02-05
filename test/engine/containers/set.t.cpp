@@ -47,34 +47,38 @@ TEST( Set, MemberFunctions )
     using namespace nge::util;
 
     Set<std::string> set;
+    constexpr uint32 COUNT = 64;
 
     uint32 i;
     uint32 j;
-    for ( i = 0; i < 1024; ++i )
+    for ( i = 0; i < COUNT; ++i )
     {
-        ASSERT_NO_THROW( set.add( getString( i + 1 ) ) );
+        set.add( getString( i + 1 ) );
         ASSERT_EQ( i + 1, set.size() );
         ASSERT_FALSE( set.isEmpty() );
 
         for ( j = 0; j < i; ++j )
         {
-            ASSERT_NO_THROW( ASSERT_TRUE( set.has( getString( j + 1 ) ) ) );
+            ASSERT_TRUE( set.has( getString( j + 1 ) ) );
         }
     }
 
-    for ( i = 0; i < 1024; ++i )
+    for ( i = 0; i < COUNT; ++i )
     {
-        ASSERT_NO_THROW( set.remove( getString( i + 1 ) ) );
-        ASSERT_EQ( 1024 - i - 1, set.size() );
+        set.remove( getString( i + 1 ) );
+        ASSERT_EQ( COUNT - i - 1, set.size() );
 
+        std::string str;
         for ( j = 0; j <= i; ++j )
         {
-            ASSERT_NO_THROW( ASSERT_FALSE( set.has( getString( j + 1 ) ) ) );
+            str = getString( j + 1 );
+            ASSERT_FALSE( set.has( str ) );
         }
 
-        for ( j = i + 1; j < 1024; ++j )
+        for ( j = i + 1; j < COUNT; ++j )
         {
-            ASSERT_NO_THROW( ASSERT_TRUE( set.has( getString( j + 1 ) ) ) );
+            str = getString( j + 1 );
+            ASSERT_TRUE( set.has( str ) );
         }
     }
 }
