@@ -82,3 +82,31 @@ TEST( Set, MemberFunctions )
         }
     }
 }
+
+TEST( Set, Iterator )
+{
+    using namespace nge;
+    using namespace nge::cntr;
+    using namespace nge::mem;
+    using namespace nge::util;
+
+    Set<uint32> set;
+    uint32 i;
+
+    for ( i = 0; i < 32; ++i )
+    {
+        set.add( i );
+    }
+
+    Set<uint32>::ConstIterator iter;
+    for ( i = 0, iter = set.cbegin(); iter != set.cend(); ++iter )
+    {
+        ASSERT_EQ( i, *iter );
+    }
+
+    Set<uint32>::ConstIterator iter2;
+    for ( iter = iter2 = set.cbegin(); iter != set.cend(); ++iter, ++iter2 )
+    {
+        ASSERT_EQ( iter, iter2 );
+    }
+}

@@ -8,6 +8,7 @@
 #include "engine/intdef.h"
 #include "engine/containers/dynamic_array.h"
 #include "engine/memory/allocator_guard.h"
+#include "list.h"
 
 namespace nge
 {
@@ -20,6 +21,97 @@ namespace cntr
 template <typename T>
 class Set
 {
+  public:
+    // CLASSES
+    /**
+     * Defines a constant iterator for the set.
+     */
+    class ConstIterator
+    {
+      private:
+        // MEMBERS
+        /**
+         * The set values that are being iterated.
+         */
+        const DynamicArray<T>* _iterValues;
+
+        /**
+         * The current position in the set.
+         */
+        uint32 _iterIndex;
+
+      public:
+        // CONSTRUCTORS
+        /**
+         * Constructs a new iterator.
+         */
+        ConstIterator();
+
+        /**
+         * Constructs an iterator for the set with the given index.
+         */
+        ConstIterator( const Set<T>* set, uint32 index );
+
+        /**
+         * Constructs a copy of the given iterator.
+         */
+        ConstIterator( const ConstIterator& iter );
+
+        /**
+         * Destructs the iterator.
+         */
+        ~ConstIterator();
+
+        // OPERATORS
+        /**
+         * Assigns this as a copy of the other iterator.
+         */
+        ConstIterator& operator=( const ConstIterator& iter );
+
+        /**
+         * Moves to the next item.
+         */
+        ConstIterator& operator++();
+
+        /**
+         * Moves to the next item.
+         */
+        ConstIterator& operator++( int32 );
+
+        /**
+         * Moves to the previous item.
+         */
+        ConstIterator& operator--();
+
+        /**
+         * Moves to the previous item.
+         */
+        ConstIterator& operator--( int32 );
+
+        /**
+         * Gets the element at the current position.
+         */
+        const T& operator*() const;
+
+        /**
+         * Gets the element at the current position.
+         *
+         * The value must not be modified in a way that it's hash code would
+         * change. To do so will cause undefined behavior.
+         */
+        const T* operator->() const;
+
+        /**
+         * Checks if the other iterator is at the same position.
+         */
+        bool operator==( const ConstIterator& iter ) const;
+
+        /**
+         * Checks if the other iterator is not at the same position.
+         */
+        bool operator!=( const ConstIterator& iter ) const;
+    };
+
   private:
     // CONSTANTS
     /**
@@ -256,6 +348,16 @@ class Set
     void clear();
 
     /**
+     * Gets an iterator for the set.
+     */
+    ConstIterator cbegin() const;
+
+    /**
+     * Gets an iterator for the end of the set.
+     */
+    ConstIterator cend() const;
+
+    /**
      * Gets the number of items in the set.
      */
     uint32 size() const;
@@ -292,7 +394,7 @@ Set<T>::Set() : _binAlloc(), _values(), _hashFunc( &util::Hasher<T>::hash ),
 template <typename T>
 inline
 Set<T>::Set( uint32 capacity )
-    : _binAlloc(), _values(), _hashFunc( &util::Hasher<T>::hash ),
+    : _binAlloc(), _values( capacity ), _hashFunc( &util::Hasher<T>::hash ),
       _bins( nullptr ), _binsInUse( 0 ), _binCount( MIN_BINS )
 {
     while ( _binCount < capacity )
@@ -317,8 +419,8 @@ Set<T>::Set( std::function<uint32( const T& )> hashFunc )
 template <typename T>
 inline
 Set<T>::Set( uint32 capacity, std::function<uint32( const T& )> hashFunc )
-    : _binAlloc(), _values(), _hashFunc( hashFunc ), _bins( nullptr ),
-      _binsInUse( 0 ), _binCount( MIN_BINS )
+    : _binAlloc(), _values( capacity ), _hashFunc( hashFunc ),
+      _bins( nullptr ), _binsInUse( 0 ), _binCount( MIN_BINS )
 {
     while ( _binCount < capacity )
     {
@@ -345,7 +447,7 @@ template <typename T>
 inline
 Set<T>::Set( mem::IAllocator<T>* valueAlloc,
              mem::IAllocator<uint32>* intAlloc, uint32 capacity )
-    : _binAlloc( intAlloc ), _values( valueAlloc ),
+    : _binAlloc( intAlloc ), _values( valueAlloc, capacity ),
       _hashFunc( &util::Hasher<T>::hash ), _bins( nullptr ),
       _binsInUse( 0 ), _binCount( MIN_BINS )
 {
@@ -373,8 +475,9 @@ template <typename T>
 inline
 Set<T>::Set( mem::IAllocator<T>* valueAlloc, mem::IAllocator<uint32>* intAlloc,
              uint32 capacity, std::function<uint32( const T& )> hashFunc )
-    : _binAlloc( intAlloc ), _values( valueAlloc ), _hashFunc( hashFunc ),
-      _bins( nullptr ), _binsInUse( 0 ), _binCount( MIN_BINS )
+    : _binAlloc( intAlloc ), _values( valueAlloc, capacity ),
+      _hashFunc( hashFunc ), _bins( nullptr ), _binsInUse( 0 ),
+      _binCount( MIN_BINS )
 {
     while ( _binCount < capacity )
     {
@@ -555,6 +658,20 @@ void Set<T>::clear()
 
 template <typename T>
 inline
+typename Set<T>::ConstIterator Set<T>::cbegin() const
+{
+    return ConstIterator( this, 0 );
+}
+
+template <typename T>
+inline
+typename Set<T>::ConstIterator Set<T>::cend() const
+{
+    return ConstIterator( this, _values.size() );
+}
+
+template <typename T>
+inline
 uint32 Set<T>::size() const
 {
     return _values.size();
@@ -673,6 +790,112 @@ inline
 void Set<T>::clearBins()
 {
     mem::MemoryUtils::set( _bins, BIN_EMPTY, _binCount );
+}
+
+// ITERATOR CONSTRUCTORS
+template <typename T>
+inline
+Set<T>::ConstIterator::ConstIterator()
+    : _iterValues( nullptr ), _iterIndex( 0 )
+{
+}
+
+template <typename T>
+inline
+Set<T>::ConstIterator::ConstIterator( const Set<T>* set, uint32 index )
+    : _iterValues( &set->_values ), _iterIndex( index )
+{
+}
+
+template <typename T>
+inline
+Set<T>::ConstIterator::ConstIterator( const ConstIterator& iter )
+    : _iterValues( iter._iterValues ), _iterIndex( iter._iterIndex )
+{
+}
+
+template <typename T>
+inline
+Set<T>::ConstIterator::~ConstIterator()
+{
+    _iterValues = nullptr;
+    _iterIndex = static_cast<uint32>( -1 );
+}
+
+// ITERATOR OPERATORS
+template <typename T>
+inline
+typename Set<T>::ConstIterator& Set<T>::ConstIterator::operator=(
+    const ConstIterator& iter )
+{
+    _iterValues = iter._iterValues;
+    _iterIndex = iter._iterIndex;
+
+    return *this;
+}
+
+template <typename T>
+inline
+typename Set<T>::ConstIterator& Set<T>::ConstIterator::operator++()
+{
+    ++_iterIndex;
+
+    return *this;
+}
+
+template <typename T>
+inline
+typename Set<T>::ConstIterator& Set<T>::ConstIterator::operator++( int32 )
+{
+    ++_iterIndex;
+
+    return *this;
+}
+
+template <typename T>
+inline
+typename Set<T>::ConstIterator& Set<T>::ConstIterator::operator--()
+{
+    _iterIndex = _iterIndex > 0 ? _iterIndex - 1 : _iterValues->size();
+
+    return *this;
+}
+
+template <typename T>
+inline
+typename Set<T>::ConstIterator& Set<T>::ConstIterator::operator--( int32 )
+{
+    _iterIndex = _iterIndex > 0 ? _iterIndex - 1 : _iterValues->size();
+
+    return *this;
+}
+
+template <typename T>
+inline
+const T& Set<T>::ConstIterator::operator*() const
+{
+    return ( *_iterValues )[_iterIndex];
+}
+
+template <typename T>
+inline
+const T* Set<T>::ConstIterator::operator->() const
+{
+    return &( *_iterValues )[_iterIndex];
+}
+
+template <typename T>
+inline
+bool Set<T>::ConstIterator::operator==( const ConstIterator& iter ) const
+{
+    return _iterValues == iter._iterValues && _iterIndex == iter._iterIndex;
+}
+
+template <typename T>
+inline
+bool Set<T>::ConstIterator::operator!=( const ConstIterator& iter ) const
+{
+    return _iterValues != iter._iterValues || _iterIndex != iter._iterIndex;
 }
 
 } // End nspc cntr
