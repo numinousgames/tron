@@ -41,7 +41,7 @@ class List
      * Defines an iterator for the list.
      */
     template <typename LPTR, typename TREF, typename CTREF, typename TPTR>
-    class SetIterator
+    class ListIterator
     {
       private:
         // MEMBERS
@@ -69,49 +69,49 @@ class List
         /**
          * Constructs a new iterator.
          */
-        SetIterator();
+        ListIterator();
 
         /**
          * Constructs an iterator for a list at the given internal index and
          * list position.
          */
-        SetIterator( LPTR list, uint32 index, uint32 pos );
+        ListIterator( LPTR list, uint32 index, uint32 pos );
 
         /**
          * Constructs a copy of the given iterator.
          */
-        SetIterator( const SetIterator& iter );
+        ListIterator( const ListIterator& iter );
 
         /**
          * Destructs the iterator.
          */
-        ~SetIterator();
+        ~ListIterator();
 
         // OPERATORS
         /**
          * Assigns this as a copy of the other iterator.
          */
-        SetIterator& operator=( const SetIterator& iter );
+        ListIterator& operator=( const ListIterator& iter );
 
         /**
          * Moves to the next item.
          */
-        SetIterator& operator++();
+        ListIterator& operator++();
 
         /**
          * Moves to the next item.
          */
-        SetIterator& operator++( int32 );
+        ListIterator& operator++( int32 );
 
         /**
          * Moves to the previous item.
          */
-        SetIterator& operator--();
+        ListIterator& operator--();
 
         /**
          * Moves to the previous item.
          */
-        SetIterator& operator--( int32 );
+        ListIterator& operator--( int32 );
 
         /**
          * Gets the element at the current position.
@@ -136,12 +136,12 @@ class List
         /**
          * Checks if the other iterator is at the same position.
          */
-        bool operator==( const SetIterator& iter ) const;
+        bool operator==( const ListIterator& iter ) const;
 
         /**
          * Checks if the other iterator is not at the same position.
          */
-        bool operator!=( const SetIterator& iter ) const;
+        bool operator!=( const ListIterator& iter ) const;
     };
 
     // CONSTANTS
@@ -264,12 +264,12 @@ class List
     /**
      * Defines an iterator for the list.
      */
-    typedef SetIterator<List<T>*, T&, const T&, T*> Iterator;
+    typedef ListIterator<List<T>*, T&, const T&, T*> Iterator;
 
     /**
      * Defines a constant iterator for the list.
      */
-    typedef SetIterator<const List<T>*, const T&, const T&, const T*>
+    typedef ListIterator<const List<T>*, const T&, const T&, const T*>
         ConstIterator;
 
     // CONSTRUCTORS
@@ -1087,7 +1087,7 @@ bool List<T>::hasFree() const
 template <typename T>
 template <typename LPTR, typename TREF, typename CTREF, typename TPTR>
 inline
-List<T>::SetIterator<LPTR, TREF, CTREF, TPTR>::SetIterator()
+List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::ListIterator()
     : _iterList( nullptr ), _iterIndex( 0 ), _iterPos( 0 )
 {
 }
@@ -1095,7 +1095,7 @@ List<T>::SetIterator<LPTR, TREF, CTREF, TPTR>::SetIterator()
 template <typename T>
 template <typename LPTR, typename TREF, typename CTREF, typename TPTR>
 inline
-List<T>::SetIterator<LPTR, TREF, CTREF, TPTR>::SetIterator(
+List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::ListIterator(
     LPTR list, uint32 index, uint32 pos )
     : _iterList( list ), _iterIndex( index ), _iterPos( pos )
 {
@@ -1104,8 +1104,8 @@ List<T>::SetIterator<LPTR, TREF, CTREF, TPTR>::SetIterator(
 template <typename T>
 template <typename LPTR, typename TREF, typename CTREF, typename TPTR>
 inline
-List<T>::SetIterator<LPTR, TREF, CTREF, TPTR>::SetIterator(
-    const SetIterator& iter )
+List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::ListIterator(
+    const ListIterator& iter )
     : _iterList( iter._iterList ), _iterIndex( iter._iterIndex ),
       _iterPos( iter._iterPos )
 {
@@ -1114,7 +1114,7 @@ List<T>::SetIterator<LPTR, TREF, CTREF, TPTR>::SetIterator(
 template <typename T>
 template <typename LPTR, typename TREF, typename CTREF, typename TPTR>
 inline
-List<T>::SetIterator<LPTR, TREF, CTREF, TPTR>::~SetIterator()
+List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::~ListIterator()
 {
     _iterList = nullptr;
     _iterIndex = static_cast<uint32>( -1 );
@@ -1125,9 +1125,9 @@ List<T>::SetIterator<LPTR, TREF, CTREF, TPTR>::~SetIterator()
 template <typename T>
 template <typename LPTR, typename TREF, typename CTREF, typename TPTR>
 inline
-List<T>::SetIterator<LPTR, TREF, CTREF, TPTR>&
-List<T>::SetIterator<LPTR, TREF, CTREF, TPTR>::operator=(
-    const List<T>::SetIterator<LPTR, TREF, CTREF, TPTR>& iter )
+List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>&
+List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::operator=(
+    const List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>& iter )
 {
     _iterList = iter._iterList;
     _iterIndex = iter._iterIndex;
@@ -1139,8 +1139,8 @@ List<T>::SetIterator<LPTR, TREF, CTREF, TPTR>::operator=(
 template <typename T>
 template <typename LPTR, typename TREF, typename CTREF, typename TPTR>
 inline
-List<T>::SetIterator<LPTR, TREF, CTREF, TPTR>&
-List<T>::SetIterator<LPTR, TREF, CTREF, TPTR>::operator++()
+List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>&
+List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::operator++()
 {
     _iterIndex = _iterList->_nodes[_iterIndex].next;
     ++_iterPos;
@@ -1151,8 +1151,8 @@ List<T>::SetIterator<LPTR, TREF, CTREF, TPTR>::operator++()
 template <typename T>
 template <typename LPTR, typename TREF, typename CTREF, typename TPTR>
 inline
-List<T>::SetIterator<LPTR, TREF, CTREF, TPTR>&
-List<T>::SetIterator<LPTR, TREF, CTREF, TPTR>::operator++( int32 )
+List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>&
+List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::operator++( int32 )
 {
     _iterIndex = _iterList->_nodes[_iterIndex].next;
     ++_iterPos;
@@ -1163,8 +1163,8 @@ List<T>::SetIterator<LPTR, TREF, CTREF, TPTR>::operator++( int32 )
 template <typename T>
 template <typename LPTR, typename TREF, typename CTREF, typename TPTR>
 inline
-List<T>::SetIterator<LPTR, TREF, CTREF, TPTR>&
-List<T>::SetIterator<LPTR, TREF, CTREF, TPTR>::operator--()
+List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>&
+List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::operator--()
 {
     _iterIndex = _iterList->_nodes[_iterIndex].prev;
     _iterPos = _iterPos > 0 ? _iterPos - 1 : _iterList->_count;
@@ -1175,8 +1175,8 @@ List<T>::SetIterator<LPTR, TREF, CTREF, TPTR>::operator--()
 template <typename T>
 template <typename LPTR, typename TREF, typename CTREF, typename TPTR>
 inline
-List<T>::SetIterator<LPTR, TREF, CTREF, TPTR>&
-List<T>::SetIterator<LPTR, TREF, CTREF, TPTR>::operator--( int32 )
+List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>&
+List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::operator--( int32 )
 {
     _iterIndex = _iterList->_nodes[_iterIndex].prev;
     _iterPos = _iterPos > 0 ? _iterPos - 1 : static_cast<uint32>( -1 );
@@ -1187,7 +1187,7 @@ List<T>::SetIterator<LPTR, TREF, CTREF, TPTR>::operator--( int32 )
 template <typename T>
 template <typename LPTR, typename TREF, typename CTREF, typename TPTR>
 inline
-CTREF List<T>::SetIterator<LPTR, TREF, CTREF, TPTR>::operator*() const
+CTREF List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::operator*() const
 {
     return _iterList->_nodes[_iterIndex].value;
 }
@@ -1195,7 +1195,7 @@ CTREF List<T>::SetIterator<LPTR, TREF, CTREF, TPTR>::operator*() const
 template <typename T>
 template <typename LPTR, typename TREF, typename CTREF, typename TPTR>
 inline
-TREF List<T>::SetIterator<LPTR, TREF, CTREF, TPTR>::operator*()
+TREF List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::operator*()
 {
     return _iterList->_nodes[_iterIndex].value;
 }
@@ -1203,7 +1203,7 @@ TREF List<T>::SetIterator<LPTR, TREF, CTREF, TPTR>::operator*()
 template <typename T>
 template <typename LPTR, typename TREF, typename CTREF, typename TPTR>
 inline
-TPTR List<T>::SetIterator<LPTR, TREF, CTREF, TPTR>::operator->() const
+TPTR List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::operator->() const
 {
     return &( _iterList->_nodes[_iterIndex].value );
 }
@@ -1211,7 +1211,7 @@ TPTR List<T>::SetIterator<LPTR, TREF, CTREF, TPTR>::operator->() const
 template <typename T>
 template <typename LPTR, typename TREF, typename CTREF, typename TPTR>
 inline
-TPTR List<T>::SetIterator<LPTR, TREF, CTREF, TPTR>::operator->()
+TPTR List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::operator->()
 {
     return &( _iterList->_nodes[_iterIndex].value );
 }
@@ -1219,8 +1219,8 @@ TPTR List<T>::SetIterator<LPTR, TREF, CTREF, TPTR>::operator->()
 template <typename T>
 template <typename LPTR, typename TREF, typename CTREF, typename TPTR>
 inline
-bool List<T>::SetIterator<LPTR, TREF, CTREF, TPTR>::operator==(
-    const SetIterator<LPTR, TREF, CTREF, TPTR>& iter ) const
+bool List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::operator==(
+    const ListIterator<LPTR, TREF, CTREF, TPTR>& iter ) const
 {
     return _iterList == iter._iterList && _iterPos == iter._iterPos;
 }
@@ -1228,8 +1228,8 @@ bool List<T>::SetIterator<LPTR, TREF, CTREF, TPTR>::operator==(
 template <typename T>
 template <typename LPTR, typename TREF, typename CTREF, typename TPTR>
 inline
-bool List<T>::SetIterator<LPTR, TREF, CTREF, TPTR>::operator!=(
-    const SetIterator<LPTR, TREF, CTREF, TPTR>& iter ) const
+bool List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::operator!=(
+    const ListIterator<LPTR, TREF, CTREF, TPTR>& iter ) const
 {
     return _iterList != iter._iterList || _iterPos != iter._iterPos;
 }
