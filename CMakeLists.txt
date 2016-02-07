@@ -28,6 +28,8 @@ set(
     README.md
     src/engine/intdef.cpp
     include/engine/intdef.h
+    src/engine/strdef.cpp
+    include/engine/strdef.h
     src/engine/containers/dynamic_array.cpp
     include/engine/containers/dynamic_array.h
     src/engine/containers/list.cpp

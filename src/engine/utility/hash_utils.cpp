@@ -7,7 +7,7 @@ namespace nge
 namespace util
 {
 
-uint32 HashUtils::fnv1a( const std::string& value )
+uint32 HashUtils::fnv1a( const String& value )
 {
     uint32 hashCode = FNV_OFFSET_32;
     uint32 i;

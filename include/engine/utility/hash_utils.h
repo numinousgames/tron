@@ -2,8 +2,7 @@
 #ifndef INCLUDED_hash_utils
 #define INCLUDED_hash_utils
 
-#include <string>
-
+#include "engine/strdef.h"
 #include "engine/intdef.h"
 
 /**
@@ -54,7 +53,7 @@ struct HashUtils
     /**
      * Computes the fnv1a hash of a string value.
      */
-    static uint32 fnv1a( const std::string& value );
+    static uint32 fnv1a( const String& value );
 
     /**
      * Compiles the fnv hash code at compile time.

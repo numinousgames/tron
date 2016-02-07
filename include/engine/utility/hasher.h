@@ -6,9 +6,8 @@
 #ifndef NGE_UTIL_HASHER_H
 #define NGE_UTIL_HASHER_H
 
-#include <string>
-
 #include "engine/intdef.h"
+#include "engine/strdef.h"
 #include "engine/utility/hash_utils.h"
 
 namespace nge
@@ -35,7 +34,7 @@ uint32 Hasher<T>::hash( const T& value )
 
 template <>
 inline
-uint32 Hasher<std::string>::hash( const std::string& value )
+uint32 Hasher<String>::hash( const String& value )
 {
     return HashUtils::fnv1a( value );
 }
