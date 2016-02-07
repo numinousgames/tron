@@ -31,6 +31,103 @@ template <typename T>
 class DynamicArray
 {
   private:
+    // CLASSES
+    /**
+     * Defines an iterator for the array.
+     */
+    template <typename APTR, typename TREF, typename CTREF, typename TPTR>
+    class ArrayIterator
+    {
+        // MEMBERS
+        /**
+         * The array that is being iterated.
+         */
+        APTR _iterArray;
+
+        /**
+         * The current index in the array.
+         */
+        uint32 _iterIndex;
+
+      public:
+        // CONSTRUCTORS
+        /**
+         * Constructs a new iterator.
+         */
+        ArrayIterator();
+
+        /**
+         * Constructs an iterator for an array starting at the given index.
+         */
+        ArrayIterator( APTR array, uint32 index );
+
+        /**
+         * Constructs a copy of the given iterator.
+         */
+        ArrayIterator( const ArrayIterator& iter );
+
+        /**
+         * Destructs the iterator.
+         */
+        ~ArrayIterator();
+
+        // OPERATORS
+        /**
+         * Assigns this as a copy of the other iterator.
+         */
+        ArrayIterator& operator=( const ArrayIterator& iter );
+
+        /**
+         * Moves to the next item.
+         */
+        ArrayIterator& operator++();
+
+        /**
+         * Moves to the next item.
+         */
+        ArrayIterator& operator++( int32 );
+
+        /**
+         * Moves to the previous item.
+         */
+        ArrayIterator& operator--();
+
+        /**
+         * Moves to the previous item.
+         */
+        ArrayIterator& operator--( int32 );
+
+        /**
+         * Gets the element at the current position.
+         */
+        CTREF operator*() const;
+
+        /**
+         * Gets the element at the current position.
+         */
+        TREF operator*();
+
+        /**
+         * Gets the element at the current position.
+         */
+        TPTR operator->() const;
+
+        /**
+         * Gets the element at the current position.
+         */
+        TPTR operator->();
+
+        /**
+         * Checks if the other iterator is at the same position.
+         */
+        bool operator==( const ArrayIterator& iter ) const;
+
+        /**
+         * Checks if the other iterator is not at the same position.
+         */
+        bool operator!=( const ArrayIterator& iter ) const;
+    };
+
     // CONSTANTS
     /**
      * The minimum array capacity.
@@ -107,6 +204,18 @@ class DynamicArray
     bool shouldShrink() const;
 
   public:
+    // TYPES
+    /**
+     * Defines an iterator for the array.
+     */
+    typedef ArrayIterator<DynamicArray<T>*, T&, const T&, T*> Iterator;
+
+    /**
+     * Defines a constant iterator for the array.
+     */
+    typedef ArrayIterator<const DynamicArray<T>*, const T&, const T&, const T*>
+        ConstIterator;
+
     // CONSTRUCTORS
     /**
      * Constructs a new DynamicArray.
@@ -235,6 +344,26 @@ class DynamicArray
      * Removes all items from the array.
      */
     void clear();
+
+    /**
+     * Gets an iterator at the start of the array.
+     */
+    Iterator begin();
+
+    /**
+     * Gets a constant iterator at the start of the array.
+     */
+    ConstIterator cbegin() const;
+
+    /**
+     * Gets an iterator at the end of the array.
+     */
+    Iterator end();
+
+    /**
+     * Gets a constant iterator at the end of the array.
+     */
+    ConstIterator cend() const;
 
     /**
      * Finds the index of the first occurrence of the value in the array.
@@ -644,6 +773,30 @@ void DynamicArray<T>::clear()
 }
 
 template <typename T>
+typename DynamicArray<T>::Iterator DynamicArray<T>::begin()
+{
+    return Iterator( this, 0 );
+}
+
+template <typename T>
+typename DynamicArray<T>::ConstIterator DynamicArray<T>::cbegin() const
+{
+    return ConstIterator( this, 0 );
+}
+
+template <typename T>
+typename DynamicArray<T>::Iterator DynamicArray<T>::end()
+{
+    return Iterator( this, _size );
+}
+
+template <typename T>
+typename DynamicArray<T>::ConstIterator DynamicArray<T>::cend() const
+{
+    return ConstIterator( this, _size );
+}
+
+template <typename T>
 uint32 DynamicArray<T>::indexOf( const T& value ) const
 {
     uint32 i;
@@ -772,6 +925,152 @@ inline
 bool DynamicArray<T>::shouldShrink() const
 {
     return _size <= ( _capacity >> 2 ) && _capacity > MIN_CAPACITY;
+}
+
+// ITERATOR CONSTRUCTORS
+template <typename T>
+template <typename APTR, typename TREF, typename CTREF, typename TPTR>
+inline
+DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::ArrayIterator()
+    : _iterArray( nullptr ), _iterIndex( 0 )
+{
+}
+
+template <typename T>
+template <typename APTR, typename TREF, typename CTREF, typename TPTR>
+inline
+DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::ArrayIterator(
+    APTR array, uint32 index ) : _iterArray( array ), _iterIndex( index )
+{
+}
+
+template <typename T>
+template <typename APTR, typename TREF, typename CTREF, typename TPTR>
+inline
+DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::ArrayIterator(
+    const ArrayIterator<APTR, TREF, CTREF, TPTR>& iter )
+    : _iterArray( iter._iterArray ), _iterIndex( iter._iterIndex )
+{
+}
+
+template <typename T>
+template <typename APTR, typename TREF, typename CTREF, typename TPTR>
+inline
+DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::~ArrayIterator()
+{
+    _iterArray = nullptr;
+    _iterIndex = static_cast<uint32>( -1 );
+}
+
+// ITERATOR OPERATORS
+template <typename T>
+template <typename APTR, typename TREF, typename CTREF, typename TPTR>
+inline
+DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>&
+DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::operator=(
+    const ArrayIterator<APTR, TREF, CTREF, TPTR>& iter )
+{
+    _iterArray = iter._iterArray;
+    _iterIndex = iter._iterIndex;
+
+    return *this;
+}
+
+template <typename T>
+template <typename APTR, typename TREF, typename CTREF, typename TPTR>
+inline
+DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>&
+DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::operator++()
+{
+    ++_iterIndex;
+
+    return *this;
+}
+
+template <typename T>
+template <typename APTR, typename TREF, typename CTREF, typename TPTR>
+inline
+DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>&
+DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::operator++( int32 )
+{
+    ++_iterIndex;
+
+    return *this;
+}
+
+template <typename T>
+template <typename APTR, typename TREF, typename CTREF, typename TPTR>
+inline
+DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>&
+DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::operator--()
+{
+    _iterIndex = ( _iterIndex > 0 ) ? _iterIndex - 1 : _iterArray->_size;
+
+    return *this;
+}
+
+template <typename T>
+template <typename APTR, typename TREF, typename CTREF, typename TPTR>
+inline
+DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>&
+DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::operator--( int32 )
+{
+    _iterIndex = ( _iterIndex > 0 ) ? _iterIndex - 1 : _iterArray->_size;
+
+    return *this;
+}
+
+template <typename T>
+template <typename APTR, typename TREF, typename CTREF, typename TPTR>
+inline
+CTREF
+DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::operator*() const
+{
+    return ( *_iterArray )[_iterIndex];
+}
+
+template <typename T>
+template <typename APTR, typename TREF, typename CTREF, typename TPTR>
+inline
+TREF DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::operator*()
+{
+    return ( *_iterArray )[_iterIndex];
+}
+
+template <typename T>
+template <typename APTR, typename TREF, typename CTREF, typename TPTR>
+inline
+TPTR
+DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::operator->() const
+{
+    return &( *_iterArray )[_iterIndex];
+}
+
+template <typename T>
+template <typename APTR, typename TREF, typename CTREF, typename TPTR>
+inline
+TPTR DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::operator->()
+{
+    return &( *_iterArray )[_iterIndex];
+}
+
+
+template <typename T>
+template <typename APTR, typename TREF, typename CTREF, typename TPTR>
+inline
+bool DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::operator==(
+    const ArrayIterator<APTR, TREF, CTREF, TPTR>& iter ) const
+{
+    return _iterArray == iter._iterArray && _iterIndex == iter._iterIndex;
+}
+
+template <typename T>
+template <typename APTR, typename TREF, typename CTREF, typename TPTR>
+inline
+bool DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::operator!=(
+    const DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>& iter ) const
+{
+    return _iterArray != iter._iterArray || _iterIndex != iter._iterIndex;
 }
 
 } // End nspc cntr
