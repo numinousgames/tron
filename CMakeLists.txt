@@ -26,29 +26,32 @@ set(
     SOURCE_FILES
     LICENSE
     README.md
-    include/engine/intdef.h
     src/engine/intdef.cpp
-    include/engine/memory/iallocator.h
-    src/engine/memory/iallocator.cpp
-    include/engine/memory/default_allocator.h
-    src/engine/memory/default_allocator.cpp
-    include/engine/memory/counting_allocator.h
+    include/engine/intdef.h
     src/engine/memory/counting_allocator.cpp
-    include/engine/containers/dynamic_array.h
-    src/engine/containers/dynamic_array.cpp
-    src/engine/memory/memory_utils.cpp
-    include/engine/memory/memory_utils.h
+    include/engine/memory/counting_allocator.h
+    src/engine/memory/default_allocator.cpp
+    include/engine/memory/default_allocator.h
+    src/engine/memory/iallocator.cpp
+    include/engine/memory/iallocator.h
     src/engine/memory/allocator_guard.cpp
     include/engine/memory/allocator_guard.h
+    src/engine/memory/memory_utils.cpp
+    include/engine/memory/memory_utils.h
+    src/engine/memory/stack_guard.cpp
+    include/engine/memory/stack_guard.h
+    src/engine/containers/dynamic_array.cpp
+    include/engine/containers/dynamic_array.h
 )
 
 set(
     TEST_FILES
-    test/engine/memory/default_allocator.t.cpp
-    test/engine/memory/counting_allocator.t.cpp
-    test/engine/containers/dynamic_array.t.cpp
     test/engine/memory/allocator_guard.t.cpp
-    test/engine/memory/memory_utils.t.cpp 
+    test/engine/memory/counting_allocator.t.cpp
+    test/engine/memory/default_allocator.t.cpp
+    test/engine/memory/memory_utils.t.cpp
+    test/engine/memory/stack_guard.t.cpp
+    test/engine/containers/dynamic_array.t.cpp
 )
 
 #
