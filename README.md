@@ -75,5 +75,5 @@ the VC++ tool chain.
 
 
 [Standards]: http://bit.ly/1J4g51q
-[Travis Badge]: https://travis-ci.org/numinousgames/tron.svg?branch=memory
+[Travis Badge]: https://travis-ci.org/numinousgames/tron.svg
 [Travis Link]: https://travis-ci.org/numinousgames/tron
