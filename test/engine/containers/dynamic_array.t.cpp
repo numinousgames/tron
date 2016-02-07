@@ -8,14 +8,16 @@ TEST( DynamicArray, ConstructionAndAssignment )
     using namespace nge::cntr;
     using namespace nge::mem;
 
-    DefaultAllocator<int32> alloc;
+    DefaultAllocator<uint32> alloc;
 
-    DynamicArray<int32> array( &alloc );
-    DynamicArray<int32> copy( array );
-    DynamicArray<int32> capacity( &alloc, static_cast<uint32>( 100 ) );
-    DynamicArray<int32> def;
+    DynamicArray<uint32> array( &alloc );
+    DynamicArray<uint32> copy( array );
+    DynamicArray<uint32> move( std::move( array ) );
+    DynamicArray<uint32> capacity( &alloc, static_cast<uint32>( 100 ) );
+    DynamicArray<uint32> def;
 
     def = copy;
+    def = std::move( copy );
 }
 
 TEST( DynamicArray, PushAndPop )
@@ -26,11 +28,11 @@ TEST( DynamicArray, PushAndPop )
 
     constexpr uint32 SIZE = 1024;
 
-    int32 i;
-    int32 tmp;
+    uint32 i;
+    uint32 tmp;
 
-    DefaultAllocator<int32> alloc;
-    DynamicArray<int32> array( &alloc );
+    DefaultAllocator<uint32> alloc;
+    DynamicArray<uint32> array( &alloc );
 
     // push
     array.push( 0 );
@@ -99,10 +101,10 @@ TEST( DynamicArray, At )
     using namespace nge::cntr;
     using namespace nge::mem;
 
-    int32 i;
+    uint32 i;
 
-    DefaultAllocator<int32> alloc;
-    DynamicArray<int32> array( &alloc );
+    DefaultAllocator<uint32> alloc;
+    DynamicArray<uint32> array( &alloc );
 
     for ( i = 0; i < 64; ++i )
     {
@@ -148,4 +150,45 @@ TEST( DynamicArray, InsertAndRemove )
         tmp = array[( i * 2 ) % array.size()];
         ASSERT_EQ( tmp, array.removeAt( ( i * 2 ) % array.size() ) );
     }
+}
+
+TEST( DynamicArray, Iterator )
+{using namespace nge;
+    using namespace nge::cntr;
+    using namespace nge::mem;
+
+    uint32 i;
+
+    DefaultAllocator<uint32> alloc;
+    DynamicArray<uint32> list( &alloc );
+
+    for ( i = 0; i < 64; ++i )
+    {
+        list.push( i );
+    }
+
+    DynamicArray<uint32>::Iterator iter;
+    for ( i = 0, iter = list.begin(); iter != list.end(); ++iter, ++i )
+    {
+        ASSERT_EQ( i, *iter );
+    }
+
+    DynamicArray<uint32>::Iterator iter2;
+    for ( iter = iter2 = list.begin(); iter != list.end(); ++iter, ++iter2 )
+    {
+        ASSERT_EQ( iter, iter2 );
+    }
+
+    for ( i = 63, iter = --list.end(); iter != list.end(); --i, --iter )
+    {
+        ASSERT_EQ( i, *iter );
+    }
+
+    DynamicArray<uint32>::ConstIterator citer;
+    for ( i = 0, citer = list.cbegin(); citer != list.cend(); ++i, ++citer )
+    {
+        ASSERT_EQ( i, *citer );
+    }
+
+    EXPECT_THROW( list.at( 65 ), std::runtime_error );
 }

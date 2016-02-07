@@ -35,7 +35,7 @@ class DefaultAllocator : public IAllocator<T>
 
     //OPERATORS
     /**
-     *Assigns a copy of an allocator.
+     * Assigns a copy of an allocator.
      */
     DefaultAllocator<T>& operator =( const DefaultAllocator<T>& assign );
 
@@ -105,6 +105,7 @@ void DefaultAllocator<T>::release( T* pointer, uint32 count )
 {
     assert( count > 0 );
     assert( pointer != nullptr );
+
     delete[] pointer;
 }
 
