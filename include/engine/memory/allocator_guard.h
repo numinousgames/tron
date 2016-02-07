@@ -166,5 +166,4 @@ IAllocator<T>* AllocatorGuard<T>::allocator() const
 
 } // End nspc nge
 
-
 #endif
