@@ -99,7 +99,7 @@ TEST( Set, Iterator )
     }
 
     Set<uint32>::ConstIterator iter;
-    for ( i = 0, iter = set.cbegin(); iter != set.cend(); ++iter )
+    for ( i = 0, iter = set.cbegin(); iter != set.cend(); ++i, ++iter )
     {
         ASSERT_EQ( i, *iter );
     }
