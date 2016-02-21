@@ -26,16 +26,19 @@ set(
     SOURCE_FILES
     LICENSE
     README.md
+    # BASE
     src/engine/intdef.cpp
     include/engine/intdef.h
     src/engine/strdef.cpp
     include/engine/strdef.h
+    # CONTAINERS
     src/engine/containers/dynamic_array.cpp
     include/engine/containers/dynamic_array.h
     src/engine/containers/list.cpp
     include/engine/containers/list.h
     src/engine/containers/set.cpp
     include/engine/containers/set.h
+    # MEMORY
     src/engine/memory/allocator_guard.cpp
     include/engine/memory/allocator_guard.h
     src/engine/memory/counting_allocator.cpp
@@ -48,24 +51,50 @@ set(
     include/engine/memory/memory_utils.h
     src/engine/memory/stack_guard.cpp
     include/engine/memory/stack_guard.h
+    # RENDERING
+#    src/engine/rendering/irenderable.cpp
+#    include/engine/rendering/irenderable.h
+#    src/engine/rendering/irenderer.cpp
+#    include/engine/rendering/irenderer.h
+#    src/engine/rendering/window.cpp
+#    include/engine/rendering/window.h
+    # UTILITY
     src/engine/utility/hasher.cpp
     include/engine/utility/hasher.h
     src/engine/utility/hash_utils.cpp
     include/engine/utility/hash_utils.h
+    src/engine/utility/timer.cpp
+    include/engine/utility/timer.h
+    # WORLD
+    src/engine/world/itickable.cpp
+    include/engine/world/itickable.h
+#    src/engine/world/ngudef.cpp
+#    include/engine/world/ngudef.h
+    src/engine/world/scene.cpp
+    include/engine/world/scene.h
+#    src/engine/world/view_port.cpp
+#    include/engine/world/view_port.h
 )
 
 set(
     TEST_FILES
+    # CONTAINERS
     test/engine/containers/dynamic_array.t.cpp
     test/engine/containers/list.t.cpp
     test/engine/containers/set.t.cpp
+    # MEMORY
     test/engine/memory/allocator_guard.t.cpp
     test/engine/memory/counting_allocator.t.cpp
     test/engine/memory/default_allocator.t.cpp
     test/engine/memory/memory_utils.t.cpp
     test/engine/memory/stack_guard.t.cpp
+    # UTILITY
     test/engine/utility/hasher.t.cpp
     test/engine/utility/hash_utils.t.cpp
+    # WORLD
+    test/engine/world/mock_tickable.cpp
+    test/engine/world/mock_tickable.h
+    test/engine/world/scene.t.cpp
 )
 
 #
