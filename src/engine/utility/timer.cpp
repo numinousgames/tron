@@ -70,6 +70,28 @@ void Timer::resume()
     _isPaused = false;
 }
 
+void Timer::stop()
+{
+    if ( !_hasStarted )
+    {
+        return;
+    }
+
+    _hasStarted = false;
+
+    if ( _isPaused )
+    {
+        return;
+    }
+
+    HighResTime last = _lastAccumulated;
+    _lastAccumulated = _clock.now();
+
+    HighResTicks ticks = toTicks( _lastAccumulated - last );
+
+    accumulateTicks( ticks );
+}
+
 } // End nspc util
 
 } // End nspc nge

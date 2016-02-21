@@ -94,6 +94,7 @@ set(
     # UTILITY
     test/engine/utility/hasher.t.cpp
     test/engine/utility/hash_utils.t.cpp
+    test/engine/utility/timer.t.cpp
     # WORLD
     test/engine/world/mock_tickable.cpp
     test/engine/world/mock_tickable.h
@@ -162,5 +163,6 @@ if ( BUILD_TESTS )
         glfw
         ${GLFW_LIBRARIES}
         ${CMAKE_THREAD_LIBS_INIT}
+        ${OPENGL_LIBRARIES}
     )
 endif()
