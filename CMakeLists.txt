@@ -35,6 +35,8 @@ set(
     # CONTAINERS
     src/engine/containers/dynamic_array.cpp
     include/engine/containers/dynamic_array.h
+    src/engine/containers/fixed_array.cpp
+    include/engine/containers/fixed_array.h
     src/engine/containers/list.cpp
     include/engine/containers/list.h
     src/engine/containers/set.cpp
@@ -59,6 +61,8 @@ set(
     include/engine/rendering/irenderable.h
     src/engine/rendering/irenderer.cpp
     include/engine/rendering/irenderer.h
+#    src/engine/rendering/shape.cpp
+#    include/engine/rendering/shape.h
     src/engine/rendering/window.cpp
     include/engine/rendering/window.h
     # UTILITY
@@ -83,6 +87,7 @@ set(
     TEST_FILES
     # CONTAINERS
     test/engine/containers/dynamic_array.t.cpp
+    test/engine/containers/fixed_array.t.cpp
     test/engine/containers/list.t.cpp
     test/engine/containers/set.t.cpp
     # MEMORY
