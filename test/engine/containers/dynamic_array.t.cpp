@@ -145,7 +145,7 @@ TEST( DynamicArray, InsertAndRemove )
         ASSERT_EQ( i, array.at( tmp ) );
     }
 
-    for ( i = 0; i < SIZE; ++i)
+    for ( i = SIZE - 1; i != static_cast<uint32>( -1 ); --i)
     {
         tmp = array[( i * 2 ) % array.size()];
         ASSERT_EQ( tmp, array.removeAt( ( i * 2 ) % array.size() ) );
@@ -153,7 +153,8 @@ TEST( DynamicArray, InsertAndRemove )
 }
 
 TEST( DynamicArray, Iterator )
-{using namespace nge;
+{
+    using namespace nge;
     using namespace nge::cntr;
     using namespace nge::mem;
 
