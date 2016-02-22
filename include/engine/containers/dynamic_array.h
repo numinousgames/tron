@@ -884,12 +884,11 @@ template <typename T>
 inline
 void DynamicArray<T>::shiftForward( uint32 start )
 {
-    assert( start <= _size );
+    assert( start >= 0 && start <= _size );
     uint32 i;
-    for ( i = _size - start - 1; i != static_cast<uint32>( -1 ); --i )
+    for ( i = _size; i > start; --i )
     {
-        _values[wrap( start + i + 1 )] =
-            std::move( wrap( _values[wrap( start + i )] ) );
+        _values[wrap( i )] = std::move( _values[wrap( i - 1 )] );
     }
 }
 
@@ -897,12 +896,11 @@ template <typename T>
 inline
 void DynamicArray<T>::shiftBackward( uint32 start )
 {
-    assert( start < _size );
+    assert( start >= 0 && start < _size );
     uint32 i;
-    for ( i = 0; i < _size - start - 1; ++i )
+    for ( i = start; i < _size - 1; ++i )
     {
-        _values[wrap( start + i )] =
-            std::move( _values[wrap( start + i + 1 )] );
+        _values[wrap( i )] = std::move( _values[wrap( i + 1 )] );
     }
 }
 

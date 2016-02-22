@@ -1,8 +1,8 @@
-// dynamic_array.t.cpp
-#include <engine/containers/dynamic_array.h>
+// fixed_array.t.cpp
+#include <engine/containers/fixed_array.h>
 #include <gtest/gtest.h>
 
-TEST( DynamicArray, ConstructionAndAssignment )
+TEST( FixedArray, ConstructionAndAssignment )
 {
     using namespace nge;
     using namespace nge::cntr;
@@ -10,29 +10,30 @@ TEST( DynamicArray, ConstructionAndAssignment )
 
     DefaultAllocator<uint32> alloc;
 
-    DynamicArray<uint32> array( &alloc );
-    DynamicArray<uint32> copy( array );
-    DynamicArray<uint32> move( std::move( array ) );
-    DynamicArray<uint32> capacity( &alloc, static_cast<uint32>( 100 ) );
-    DynamicArray<uint32> def;
+    FixedArray<uint32> array( &alloc );
+    FixedArray<uint32> copy( array );
+    FixedArray<uint32> move( std::move( array ) );
+    FixedArray<uint32> capacity( &alloc, static_cast<uint32>( 100 ) );
+    FixedArray<uint32> def;
 
     def = copy;
     def = std::move( copy );
 }
 
-TEST( DynamicArray, PushAndPop )
+TEST( FixedArray, PushAndPop )
 {
     using namespace nge;
     using namespace nge::cntr;
     using namespace nge::mem;
 
+    constexpr uint32 MAX_SIZE = 2048;
     constexpr uint32 SIZE = 1024;
 
     uint32 i;
     uint32 tmp;
 
     DefaultAllocator<uint32> alloc;
-    DynamicArray<uint32> array( &alloc );
+    FixedArray<uint32> array( &alloc, MAX_SIZE );
 
     // push
     array.push( 0 );
@@ -95,31 +96,33 @@ TEST( DynamicArray, PushAndPop )
     EXPECT_EQ( 10,  array[array.size() - 1] );
 }
 
-TEST( DynamicArray, At )
+TEST( FixedArray, At )
 {
     using namespace nge;
     using namespace nge::cntr;
     using namespace nge::mem;
 
+    constexpr uint32 SIZE = 64;
+
     uint32 i;
 
     DefaultAllocator<uint32> alloc;
-    DynamicArray<uint32> array( &alloc );
+    FixedArray<uint32> array( &alloc, SIZE );
 
-    for ( i = 0; i < 64; ++i )
+    for ( i = 0; i < SIZE; ++i )
     {
         array.push( i );
     }
 
-    for ( i = 0; i < 64; ++i )
+    for ( i = 0; i < SIZE; ++i )
     {
         ASSERT_EQ( i, array.at( i ) );
     }
 
-    EXPECT_THROW( array.at( 65 ), std::runtime_error );
+    EXPECT_THROW( array.at( SIZE + 1 ), std::runtime_error );
 }
 
-TEST( DynamicArray, InsertAndRemove )
+TEST( FixedArray, InsertAndRemove )
 {
     using namespace nge;
     using namespace nge::cntr;
@@ -131,12 +134,7 @@ TEST( DynamicArray, InsertAndRemove )
     uint32 tmp;
 
     DefaultAllocator<uint32> alloc;
-    DynamicArray<uint32> array( &alloc );
-
-    // force wrap
-    array.push( 0 );
-    array.popFront();
-    array.push( 0 );
+    FixedArray<uint32> array( &alloc, SIZE );
 
     for ( i = 0; i < SIZE; ++i )
     {
@@ -152,29 +150,31 @@ TEST( DynamicArray, InsertAndRemove )
     }
 }
 
-TEST( DynamicArray, Iterator )
+TEST( FixedArray, Iterator )
 {
     using namespace nge;
     using namespace nge::cntr;
     using namespace nge::mem;
 
+    constexpr uint32 SIZE = 64;
+
     uint32 i;
 
     DefaultAllocator<uint32> alloc;
-    DynamicArray<uint32> list( &alloc );
+    FixedArray<uint32> list( &alloc, SIZE );
 
-    for ( i = 0; i < 64; ++i )
+    for ( i = 0; i < SIZE; ++i )
     {
         list.push( i );
     }
 
-    DynamicArray<uint32>::Iterator iter;
+    FixedArray<uint32>::Iterator iter;
     for ( i = 0, iter = list.begin(); iter != list.end(); ++iter, ++i )
     {
         ASSERT_EQ( i, *iter );
     }
 
-    DynamicArray<uint32>::Iterator iter2;
+    FixedArray<uint32>::Iterator iter2;
     for ( iter = iter2 = list.begin(); iter != list.end(); ++iter, ++iter2 )
     {
         ASSERT_EQ( iter, iter2 );
@@ -185,11 +185,11 @@ TEST( DynamicArray, Iterator )
         ASSERT_EQ( i, *iter );
     }
 
-    DynamicArray<uint32>::ConstIterator citer;
+    FixedArray<uint32>::ConstIterator citer;
     for ( i = 0, citer = list.cbegin(); citer != list.cend(); ++i, ++citer )
     {
         ASSERT_EQ( i, *citer );
     }
 
-    EXPECT_THROW( list.at( 65 ), std::runtime_error );
+    EXPECT_THROW( list.at( SIZE + 1 ), std::runtime_error );
 }

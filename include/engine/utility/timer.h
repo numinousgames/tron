@@ -318,12 +318,6 @@ uint64 Timer::totalTicks() const
     return _elapsed.count();
 }
 
-inline
-void Timer::stop()
-{
-    _hasStarted = false;
-}
-
 // HELPER FUNCTIONS
 inline
 void Timer::accumulateTicks( HighResTicks dt )
