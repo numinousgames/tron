@@ -38,6 +38,29 @@ set(
     include/engine/containers/list.h
     src/engine/containers/set.cpp
     include/engine/containers/set.h
+    # MATH
+    src/engine/math/mat.cpp
+    include/engine/math/mat.h
+    src/engine/math/mat2x2.cpp
+    include/engine/math/mat2x2.h
+    src/engine/math/mat3x3.cpp
+    include/engine/math/mat3x3.h
+    src/engine/math/mat4x4.cpp
+    include/engine/math/mat4x4.h
+    src/engine/math/mat_math.cpp
+    include/engine/math/mat_math.h
+    src/engine/math/math.cpp
+    include/engine/math/math.h
+    src/engine/math/vec.cpp
+    include/engine/math/vec.h
+    src/engine/math/vec2.cpp
+    include/engine/math/vec2.h
+    src/engine/math/vec3.cpp
+    include/engine/math/vec3.h
+    src/engine/math/vec4.cpp
+    include/engine/math/vec4.h
+    src/engine/math/vec_math.cpp
+    include/engine/math/vec_math.h
     # MEMORY
     src/engine/memory/allocator_guard.cpp
     include/engine/memory/allocator_guard.h
@@ -82,6 +105,13 @@ set(
     test/engine/containers/dynamic_array.t.cpp
     test/engine/containers/list.t.cpp
     test/engine/containers/set.t.cpp
+    # MATH
+    test/engine/math/mat2x2.t.cpp
+    test/engine/math/mat3x3.t.cpp
+    test/engine/math/mat4x4.t.cpp
+    test/engine/math/vec2.t.cpp
+    test/engine/math/vec3.t.cpp
+    test/engine/math/vec4.t.cpp
     # MEMORY
     test/engine/memory/allocator_guard.t.cpp
     test/engine/memory/counting_allocator.t.cpp
