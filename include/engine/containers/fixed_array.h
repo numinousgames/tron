@@ -12,6 +12,7 @@
 #define NGE_CNTR_FIXED_ARRAY_H
 
 #include <stdexcept>
+#include <engine/port.h>
 
 #include "engine/intdef.h"
 #include "engine/memory/allocator_guard.h"
@@ -860,7 +861,7 @@ template <typename T>
 template <typename APTR, typename TREF, typename CTREF, typename TPTR>
 inline
 FixedArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::ArrayIterator(
-    const FixedArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>& iter )
+    const ArrayIterator& iter )
     : _iterArray( iter._iterArray ), _iterIndex( iter._iterIndex )
 {
 }
@@ -878,9 +879,9 @@ FixedArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::~ArrayIterator()
 template <typename T>
 template <typename APTR, typename TREF, typename CTREF, typename TPTR>
 inline
-FixedArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>&
+vc_typename FixedArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>&
 FixedArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::operator=(
-    const ArrayIterator<APTR, TREF, CTREF, TPTR>& iter )
+    const ArrayIterator& iter )
 {
     _iterArray = iter._iterArray;
     _iterIndex = iter._iterIndex;
@@ -891,7 +892,7 @@ FixedArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::operator=(
 template <typename T>
 template <typename APTR, typename TREF, typename CTREF, typename TPTR>
 inline
-FixedArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>&
+vc_typename FixedArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>&
 FixedArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::operator++()
 {
     ++_iterIndex;
@@ -902,7 +903,7 @@ FixedArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::operator++()
 template <typename T>
 template <typename APTR, typename TREF, typename CTREF, typename TPTR>
 inline
-FixedArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>&
+vc_typename FixedArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>&
 FixedArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::operator++( int32 )
 {
     ++_iterIndex;
@@ -913,7 +914,7 @@ FixedArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::operator++( int32 )
 template <typename T>
 template <typename APTR, typename TREF, typename CTREF, typename TPTR>
 inline
-FixedArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>&
+vc_typename FixedArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>&
 FixedArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::operator--()
 {
     _iterIndex = ( _iterIndex > 0 ) ? _iterIndex - 1 : _iterArray->_size;
@@ -924,7 +925,7 @@ FixedArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::operator--()
 template <typename T>
 template <typename APTR, typename TREF, typename CTREF, typename TPTR>
 inline
-FixedArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>&
+vc_typename FixedArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>&
 FixedArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::operator--( int32 )
 {
     _iterIndex = ( _iterIndex > 0 ) ? _iterIndex - 1 : _iterArray->_size;
@@ -971,7 +972,7 @@ template <typename T>
 template <typename APTR, typename TREF, typename CTREF, typename TPTR>
 inline
 bool FixedArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::operator==(
-    const ArrayIterator<APTR, TREF, CTREF, TPTR>& iter ) const
+    const ArrayIterator& iter ) const
 {
     return _iterArray == iter._iterArray && _iterIndex == iter._iterIndex;
 }
@@ -980,7 +981,7 @@ template <typename T>
 template <typename APTR, typename TREF, typename CTREF, typename TPTR>
 inline
 bool FixedArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::operator!=(
-    const FixedArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>& iter ) const
+    const ArrayIterator& iter ) const
 {
     return _iterArray != iter._iterArray || _iterIndex != iter._iterIndex;
 }

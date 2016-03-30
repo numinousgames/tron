@@ -30,6 +30,8 @@ set(
     # BASE
     src/engine/intdef.cpp
     include/engine/intdef.h
+    src/engine/port.cpp
+    include/engine/port.h
     src/engine/strdef.cpp
     include/engine/strdef.h
     # CONTAINERS
@@ -98,12 +100,12 @@ set(
     # WORLD
     src/engine/world/itickable.cpp
     include/engine/world/itickable.h
-    #    src/engine/world/ngudef.cpp
-    #    include/engine/world/ngudef.h
+#    src/engine/world/ngudef.cpp
+#    include/engine/world/ngudef.h
     src/engine/world/scene.cpp
     include/engine/world/scene.h
-    #    src/engine/world/view_port.cpp
-    #    include/engine/world/view_port.h
+#    src/engine/world/view_port.cpp
+#    include/engine/world/view_port.h
 )
 
 set(
