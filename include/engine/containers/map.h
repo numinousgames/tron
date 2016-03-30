@@ -155,7 +155,7 @@ class Map
 
     // CLASSES
     /**
-     * Defines a constant iterator for the set.
+     * Defines a constant iterator for the map.
      */
     class ConstIterator
     {
