@@ -1,6 +1,8 @@
 // timer.t.cpp
 #include <engine/utility/timer.h>
 #include <gtest/gtest.h>
+#include <chrono>
+#include <thread>
 
 TEST( Timer, Construction )
 {
@@ -23,14 +25,14 @@ TEST( Timer, StartAndStop )
 
     timer.start();
 
-    usleep( 1000 );
+	std::this_thread::sleep_for( std::chrono::microseconds( 1000 ) );
 
     EXPECT_TRUE( timer.elapsed() > 0.001f );
     EXPECT_TRUE( timer.elapsedTicks() > 1000000 );
 
     timer.stop();
 
-    usleep( 1000 );
+	std::this_thread::sleep_for(std::chrono::microseconds(1000));
 
     EXPECT_TRUE( timer.elapsed() > 0.001f );
     EXPECT_TRUE( timer.elapsedTicks() > 1000000 );
@@ -56,14 +58,14 @@ TEST( Timer, PauseAndResumeAndLapAndTotal )
 
     timer.start();
 
-    usleep( 1000 );
+	std::this_thread::sleep_for(std::chrono::microseconds(1000));
 
     EXPECT_TRUE( timer.elapsed() > 0.001f );
     EXPECT_TRUE( timer.elapsedTicks() > 1 );
 
     timer.pause();
 
-    usleep( 1000 );
+	std::this_thread::sleep_for(std::chrono::microseconds(1000));
 
     EXPECT_TRUE( timer.elapsed() > 0.001f );
     EXPECT_TRUE( timer.elapsedTicks() > 1000000 );
@@ -72,12 +74,12 @@ TEST( Timer, PauseAndResumeAndLapAndTotal )
 
     timer.resume();
 
-    usleep( 1000 );
+	std::this_thread::sleep_for(std::chrono::microseconds(1000));
 
     EXPECT_TRUE( timer.elapsed() > 0.002f );
     EXPECT_TRUE( timer.elapsedTicks() > 2000000 );
 
-    usleep( 1000 );
+	std::this_thread::sleep_for(std::chrono::microseconds(1000));
 
     EXPECT_FALSE( timer.total() > 0.002f );
     EXPECT_FALSE( timer.totalTicks() > 2000000 );
@@ -105,7 +107,7 @@ TEST( Timer, TimeScale )
     timer.setTimeScale( 2.0f );
     timer.start();
 
-    usleep( 1000 );
+	std::this_thread::sleep_for(std::chrono::microseconds(1000));
 
     EXPECT_TRUE( timer.elapsed() > 0.002f );
     EXPECT_TRUE( timer.elapsedTicks() > 2000000 );
