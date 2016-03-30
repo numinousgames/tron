@@ -341,6 +341,13 @@ class DynamicArray
     T removeAt( uint32 index );
 
     /**
+     * Removes the given value from the array and returns if it was found.
+     *
+     * This will only remove the first occurance.
+     */
+    bool remove( const T& value );
+
+    /**
      * Removes all items from the array.
      */
     void clear();
@@ -766,6 +773,20 @@ T DynamicArray<T>::removeAt( uint32 index )
 }
 
 template <typename T>
+inline
+bool DynamicArray<T>::remove( const T& value )
+{
+    uint32 index = indexOf( value );
+    if ( value == static_cast<uint32>( -1 ) )
+    {
+        return false;
+    }
+
+    removeAt( index );
+    return true;
+}
+
+template <typename T>
 void DynamicArray<T>::clear()
 {
     _size = 0;
@@ -798,7 +819,7 @@ typename DynamicArray<T>::ConstIterator DynamicArray<T>::cend() const
 
 template <typename T>
 uint32 DynamicArray<T>::indexOf( const T& value ) const
-{
+ {
     uint32 i;
     bool found;
     for ( i = 0, found = false; !found && i < _size; ++i )
