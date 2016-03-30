@@ -148,7 +148,7 @@ struct Mat
      * @param theta The rotation in radians.
      * @return The rotation matrix.
      */
-    template <typename T, Math::AngleUnit Units = Math::Radians>
+    template <typename T, Math::AngleUnit Units = Math::RADIANS>
     static TMat4x4<T> rotateX( T theta );
 
     /**
@@ -157,7 +157,7 @@ struct Mat
      * @param theta The rotation in radians.
      * @return The rotation matrix.
      */
-    template <typename T, Math::AngleUnit Units = Math::Radians>
+    template <typename T, Math::AngleUnit Units = Math::RADIANS>
     static TMat4x4<T> rotateY( T theta );
 
     /**
@@ -166,7 +166,7 @@ struct Mat
      * @param theta The rotation in radians.
      * @return The rotation matrix.
      */
-    template <typename T, Math::AngleUnit Units = Math::Radians>
+    template <typename T, Math::AngleUnit Units = Math::RADIANS>
     static TMat4x4<T> rotateZ( T theta );
     /**
      * Creates the scale transformation matrix for the given scale factor.

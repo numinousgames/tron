@@ -362,6 +362,16 @@ class FixedArray
     T removeAt( uint32 index );
 
     /**
+     * Removes the value and returns if it was found.
+     *
+     * This will only remove the first occurance.
+     *
+     * Behavior is undefined when:
+     * array is empty.
+     */
+    bool remove( const T& value );
+
+    /**
      * Removes all items from the array.
      */
     void clear();
@@ -686,6 +696,20 @@ T FixedArray<T>::removeAt( uint32 index )
     --_size;
 
     return elem;
+}
+
+template <typename T>
+inline
+bool FixedArray<T>::remove( const T& value )
+{
+    uint32 index = indexOf( value );
+    if ( index == static_cast<uint32>( -1 ) )
+    {
+        return false;
+    }
+
+    removeAt( index );
+    return true;
 }
 
 template <typename T>
