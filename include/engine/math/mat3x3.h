@@ -668,24 +668,24 @@ const TMat3x3<T> TMat3x3<T>::ZERO = TMat3x3<T>( 0 );
 // CONSTRUCTORS
 template <typename T>
 inline
-TMat3x3<T>::TMat3x3() : _value( { Column( 1, 0, 0 ),
-                                  Column( 0, 1, 0 ),
-                                  Column( 0, 0, 1 ) } )
+TMat3x3<T>::TMat3x3() : _value { Column( 1, 0, 0 ),
+                                 Column( 0, 1, 0 ),
+                                 Column( 0, 0, 1 ) }
 {
 }
 
 template <typename T>
 inline
-TMat3x3<T>::TMat3x3( const TMat3x3<T>& m ) : _value( { m[0], m[1], m[2] } )
+TMat3x3<T>::TMat3x3( const TMat3x3<T>& m ) : _value { m[0], m[1], m[2] }
 {
 }
 
 template <typename T>
 template <typename U>
 inline
-TMat3x3<T>::TMat3x3( const U& s ) : _value( { Column( s, 0, 0 ),
-                                              Column( 0, s, 0 ),
-                                              Column( 0, 0, s ) } )
+TMat3x3<T>::TMat3x3( const U& s ) : _value { Column( s, 0, 0 ),
+                                             Column( 0, s, 0 ),
+                                             Column( 0, 0, s ) }
 {
 }
 
@@ -697,9 +697,9 @@ inline
 TMat3x3<T>::TMat3x3( const X1& x1, const X2& x2, const X3& x3,
                      const Y1& y1, const Y2& y2, const Y3& y3,
                      const Z1& z1, const Z2& z2, const Z3& z3 )
-    : _value( { Column( T( x1 ), T( y1 ), T( z1 ) ),
-                Column( T( x2 ), T( y2 ), T( z2 ) ),
-                Column( T( x3 ), T( y3 ), T( z3 ) ) } )
+    : _value { Column( T( x1 ), T( y1 ), T( z1 ) ),
+               Column( T( x2 ), T( y2 ), T( z2 ) ),
+               Column( T( x3 ), T( y3 ), T( z3 ) ) }
 {
 }
 
@@ -707,7 +707,7 @@ template <typename T>
 template <typename I, typename J, typename K>
 inline
 TMat3x3<T>::TMat3x3( const TVec3<I>& c1, const TVec3<J>& c2, const TVec3<K>& c3 )
-    : _value( { c1, c2, c3 } )
+    : _value { c1, c2, c3 }
 {
 }
 
@@ -715,9 +715,9 @@ template <typename T>
 template <typename U>
 inline
 TMat3x3<T>::TMat3x3( const TMat2x2<U>& m )
-    : _value( { Column( TVec2<T>( m[0] ), 0 ),
-                Column( TVec2<T>( m[1] ), 0 ),
-                Column( 0, 0, 1 ) } )
+    : _value { Column( TVec2<T>( m[0] ), 0 ),
+               Column( TVec2<T>( m[1] ), 0 ),
+               Column( 0, 0, 1 ) }
 {
 }
 
@@ -725,9 +725,9 @@ template <typename T>
 template <typename U>
 inline
 TMat3x3<T>::TMat3x3( const TMat3x3<U>& m )
-    : _value( { Column( m[0] ),
-                Column( m[1] ),
-                Column( m[2] ) } )
+    : _value { Column( m[0] ),
+               Column( m[1] ),
+               Column( m[2] ) }
 {
 }
 
@@ -735,9 +735,9 @@ template <typename T>
 template <typename U>
 inline
 TMat3x3<T>::TMat3x3( const TMat4x4<U>& m )
-    : _value( { Column( m[0] ),
-                Column( m[1] ),
-                Column( m[2] ) } )
+    : _value { Column( m[0] ),
+               Column( m[1] ),
+               Column( m[2] ) }
 {
 }
 

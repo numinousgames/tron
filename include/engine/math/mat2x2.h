@@ -660,22 +660,22 @@ const TMat2x2<T> TMat2x2<T>::ZERO = TMat2x2<T>( 0 );
 // CONSTRUCTORS
 template <typename T>
 inline
-TMat2x2<T>::TMat2x2() : _value( { Column( 1, 0 ),
-                                  Column( 0, 1 ) } )
+TMat2x2<T>::TMat2x2() : _value { Column( 1, 0 ),
+                                 Column( 0, 1 ) }
 {
 }
 
 template <typename T>
 inline
-TMat2x2<T>::TMat2x2( const TMat2x2<T>& m ) : _value( { m[0], m[1] } )
+TMat2x2<T>::TMat2x2( const TMat2x2<T>& m ) : _value { m[0], m[1] }
 {
 }
 
 template <typename T>
 template <typename U>
 inline
-TMat2x2<T>::TMat2x2( const U& s ) : _value( { Column( s, 0 ),
-                                              Column( 0, s ) } )
+TMat2x2<T>::TMat2x2( const U& s ) : _value { Column( s, 0 ),
+                                             Column( 0, s ) }
 {
 }
 
@@ -685,8 +685,8 @@ template <typename X1, typename X2,
 inline
 TMat2x2<T>::TMat2x2( const X1& x1, const X2& x2,
                      const Y1& y1, const Y2& y2 )
-    : _value( { Column( T( x1 ), T( y1 ) ),
-                Column( T( x2 ), T( y2 ) ) } )
+    : _value { Column( T( x1 ), T( y1 ) ),
+               Column( T( x2 ), T( y2 ) ) }
 {
 }
 
@@ -694,7 +694,7 @@ template <typename T>
 template <typename I, typename J>
 inline
 TMat2x2<T>::TMat2x2( const TVec2<I>& c1, const TVec2<J>& c2 )
-    : _value( { c1, c2 } )
+    : _value { c1, c2 }
 {
 }
 
@@ -702,8 +702,8 @@ template <typename T>
 template <typename U>
 inline
 TMat2x2<T>::TMat2x2( const TMat2x2<U>& m )
-    : _value( { Column( m[0] ),
-                Column( m[1] ) } )
+    : _value { Column( m[0] ),
+               Column( m[1] ) }
 {
 }
 
@@ -711,8 +711,8 @@ template <typename T>
 template <typename U>
 inline
 TMat2x2<T>::TMat2x2( const TMat3x3<U>& m )
-    : _value( { Column( m[0] ),
-                Column( m[1] ) } )
+    : _value { Column( m[0] ),
+               Column( m[1] ) }
 {
 }
 
@@ -720,8 +720,8 @@ template <typename T>
 template <typename U>
 inline
 TMat2x2<T>::TMat2x2( const TMat4x4<U>& m )
-    : _value( { Column( m[0] ),
-                Column( m[1] ) } )
+    : _value { Column( m[0] ),
+               Column( m[1] ) }
 {
 }
 
