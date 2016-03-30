@@ -34,8 +34,8 @@ struct Math
 
     enum AngleUnit
     {
-        Radians,
-        Degrees
+        RADIANS,
+        DEGREES
     };
 
     // INTEGRAL MATH
@@ -492,84 +492,84 @@ double Math::max( double x, double y )
 
 template <>
 inline
-float Math::cos<Math::Radians>( float theta )
+float Math::cos<Math::RADIANS>( float theta )
 {
     return std::cos( theta );
 }
 
 template <>
 inline
-float Math::cos<Math::Degrees>( float theta )
+float Math::cos<Math::DEGREES>( float theta )
 {
     return std::cos( theta * ( PI / 180.0f ) );
 }
 
 template <>
 inline
-double Math::cos<Math::Radians>( double theta )
+double Math::cos<Math::RADIANS>( double theta )
 {
     return std::cos( theta );
 }
 
 template <>
 inline
-double Math::cos<Math::Degrees>( double theta )
+double Math::cos<Math::DEGREES>( double theta )
 {
     return std::cos( theta * ( static_cast<double>( PI ) / 180.0 ) );
 }
 
 template <>
 inline
-float Math::sin<Math::Radians>( float theta )
+float Math::sin<Math::RADIANS>( float theta )
 {
     return std::sin( theta );
 }
 
 template <>
 inline
-float Math::sin<Math::Degrees>( float theta )
+float Math::sin<Math::DEGREES>( float theta )
 {
     return std::sin( theta * ( PI / 180.0f ) );
 }
 
 template <>
 inline
-double Math::sin<Math::Radians>( double theta )
+double Math::sin<Math::RADIANS>( double theta )
 {
     return std::sin( theta );
 }
 
 template <>
 inline
-double Math::sin<Math::Degrees>( double theta )
+double Math::sin<Math::DEGREES>( double theta )
 {
     return std::sin( theta * ( static_cast<double>( PI ) / 180.0 ) );
 }
 
 template <>
 inline
-float Math::tan<Math::Radians>( float theta )
+float Math::tan<Math::RADIANS>( float theta )
 {
     return std::tan( theta );
 }
 
 template <>
 inline
-float Math::tan<Math::Degrees>( float theta )
+float Math::tan<Math::DEGREES>( float theta )
 {
     return std::tan( theta * ( PI / 180.0f ) );
 }
 
 template <>
 inline
-double Math::tan<Math::Radians>( double theta )
+double Math::tan<Math::RADIANS>( double theta )
 {
     return std::tan( theta );
 }
 
 template <>
 inline
-double Math::tan<Math::Degrees>( double theta )
+double Math::tan<Math::DEGREES>( double theta )
 {
     return std::tan( theta * ( static_cast<double>( PI ) / 180.0 ) );
 }
