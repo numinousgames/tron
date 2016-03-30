@@ -181,7 +181,7 @@ struct Math
      * @tparam Units The angle units to use.
      * @return cosine(theta).
      */
-    template <AngleUnit Units = Radians>
+    template <AngleUnit Units = RADIANS>
     static float cos( float theta );
 
     /**
@@ -191,7 +191,7 @@ struct Math
      * @tparam Units The angle units to use.
      * @return cosine(theta).
      */
-    template <AngleUnit Units = Radians>
+    template <AngleUnit Units = RADIANS>
     static double cos( double theta );
 
     /**
@@ -201,7 +201,7 @@ struct Math
      * @tparam Units The angle units to use.
      * @return sine(theta).
      */
-    template <AngleUnit Units = Radians>
+    template <AngleUnit Units = RADIANS>
     static float sin( float theta );
 
     /**
@@ -211,7 +211,7 @@ struct Math
      * @tparam Units The angle units to use.
      * @return sine(theta).
      */
-    template <AngleUnit Units = Radians>
+    template <AngleUnit Units = RADIANS>
     static double sin( double theta );
 
     /**
@@ -221,7 +221,7 @@ struct Math
      * @tparam Units The angle units to use.
      * @return tangent(theta).
      */
-    template <AngleUnit Units = Radians>
+    template <AngleUnit Units = RADIANS>
     static float tan( float theta );
 
     /**
@@ -231,7 +231,7 @@ struct Math
      * @tparam Units The angle units to use.
      * @return tangent(theta).
      */
-    template <AngleUnit Units = Radians>
+    template <AngleUnit Units = RADIANS>
     static double tan( double theta );
 
     // FLOATING POINT COMPARISON

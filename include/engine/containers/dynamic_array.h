@@ -20,6 +20,7 @@
 #include "engine/memory/allocator_guard.h"
 #include "engine/memory/iallocator.h"
 #include "engine/memory/memory_utils.h"
+#include "engine/port.h"
 
 namespace nge
 {
@@ -967,7 +968,7 @@ template <typename T>
 template <typename APTR, typename TREF, typename CTREF, typename TPTR>
 inline
 DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::ArrayIterator(
-    const typename ArrayIterator<APTR, TREF, CTREF, TPTR>& iter )
+    const ArrayIterator& iter )
     : _iterArray( iter._iterArray ), _iterIndex( iter._iterIndex )
 {
 }
@@ -985,9 +986,9 @@ DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::~ArrayIterator()
 template <typename T>
 template <typename APTR, typename TREF, typename CTREF, typename TPTR>
 inline
-typename DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>&
+vc_typename DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>&
 DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::operator=(
-    const typename ArrayIterator<APTR, TREF, CTREF, TPTR>& iter )
+    const ArrayIterator& iter )
 {
     _iterArray = iter._iterArray;
     _iterIndex = iter._iterIndex;
@@ -998,7 +999,7 @@ DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::operator=(
 template <typename T>
 template <typename APTR, typename TREF, typename CTREF, typename TPTR>
 inline
-typename DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>&
+vc_typename DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>&
 DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::operator++()
 {
     ++_iterIndex;
@@ -1009,7 +1010,7 @@ DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::operator++()
 template <typename T>
 template <typename APTR, typename TREF, typename CTREF, typename TPTR>
 inline
-typename DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>&
+vc_typename DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>&
 DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::operator++( int32 )
 {
     ++_iterIndex;
@@ -1020,7 +1021,7 @@ DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::operator++( int32 )
 template <typename T>
 template <typename APTR, typename TREF, typename CTREF, typename TPTR>
 inline
-typename DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>&
+vc_typename DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>&
 DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::operator--()
 {
     _iterIndex = ( _iterIndex > 0 ) ? _iterIndex - 1 : _iterArray->_size;
@@ -1031,7 +1032,7 @@ DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::operator--()
 template <typename T>
 template <typename APTR, typename TREF, typename CTREF, typename TPTR>
 inline
-typename DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>&
+vc_typename DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>&
 DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::operator--( int32 )
 {
     _iterIndex = ( _iterIndex > 0 ) ? _iterIndex - 1 : _iterArray->_size;
@@ -1078,7 +1079,7 @@ template <typename T>
 template <typename APTR, typename TREF, typename CTREF, typename TPTR>
 inline
 bool DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::operator==(
-    const typename ArrayIterator<APTR, TREF, CTREF, TPTR>& iter ) const
+    const ArrayIterator& iter ) const
 {
     return _iterArray == iter._iterArray && _iterIndex == iter._iterIndex;
 }
@@ -1087,7 +1088,7 @@ template <typename T>
 template <typename APTR, typename TREF, typename CTREF, typename TPTR>
 inline
 bool DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>::operator!=(
-    const typename DynamicArray<T>::ArrayIterator<APTR, TREF, CTREF, TPTR>& iter ) const
+    const ArrayIterator& iter ) const
 {
     return _iterArray != iter._iterArray || _iterIndex != iter._iterIndex;
 }
