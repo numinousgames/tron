@@ -13,6 +13,7 @@
 #include "engine/memory/allocator_guard.h"
 #include "engine/memory/iallocator.h"
 #include "engine/memory/memory_utils.h"
+#include "engine/port.h"
 
 namespace nge
 {
@@ -382,6 +383,13 @@ class List
      * Removes the value at the given index in the array.
      */
     T removeAt( uint32 index );
+
+    /**
+     * Removes the value from the list and returns if it was found.
+     *
+     * This will only remove the first occurance.
+     */
+    bool remove( const T& value );
 
     /**
      * Removes all items from the array.
@@ -799,6 +807,20 @@ T List<T>::removeAt( uint32 index )
 
 template <typename T>
 inline
+bool List<T>::remove( const T& value )
+{
+    uint32 index = indexOf( value );
+    if ( index == static_cast<uint32>( -1 ) )
+    {
+        return false;
+    }
+
+    removeAt( index );
+    return true;
+}
+
+template <typename T>
+inline
 void List<T>::clear()
 {
     _first = 0;
@@ -1125,9 +1147,9 @@ List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::~ListIterator()
 template <typename T>
 template <typename LPTR, typename TREF, typename CTREF, typename TPTR>
 inline
-typename List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>&
+vc_typename List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>&
 List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::operator=(
-    const typename List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>& iter )
+    const ListIterator& iter )
 {
     _iterList = iter._iterList;
     _iterIndex = iter._iterIndex;
@@ -1139,7 +1161,7 @@ List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::operator=(
 template <typename T>
 template <typename LPTR, typename TREF, typename CTREF, typename TPTR>
 inline
-typename List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>&
+vc_typename List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>&
 List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::operator++()
 {
     _iterIndex = _iterList->_nodes[_iterIndex].next;
@@ -1151,7 +1173,7 @@ List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::operator++()
 template <typename T>
 template <typename LPTR, typename TREF, typename CTREF, typename TPTR>
 inline
-typename List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>&
+vc_typename List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>&
 List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::operator++( int32 )
 {
     _iterIndex = _iterList->_nodes[_iterIndex].next;
@@ -1163,7 +1185,7 @@ List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::operator++( int32 )
 template <typename T>
 template <typename LPTR, typename TREF, typename CTREF, typename TPTR>
 inline
-typename List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>&
+vc_typename List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>&
 List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::operator--()
 {
     _iterIndex = _iterList->_nodes[_iterIndex].prev;
@@ -1175,7 +1197,7 @@ List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::operator--()
 template <typename T>
 template <typename LPTR, typename TREF, typename CTREF, typename TPTR>
 inline
-typename List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>&
+vc_typename List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>&
 List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::operator--( int32 )
 {
     _iterIndex = _iterList->_nodes[_iterIndex].prev;
@@ -1220,7 +1242,7 @@ template <typename T>
 template <typename LPTR, typename TREF, typename CTREF, typename TPTR>
 inline
 bool List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::operator==(
-    const typename ListIterator<LPTR, TREF, CTREF, TPTR>& iter ) const
+    const ListIterator& iter ) const
 {
     return _iterList == iter._iterList && _iterPos == iter._iterPos;
 }
@@ -1229,7 +1251,7 @@ template <typename T>
 template <typename LPTR, typename TREF, typename CTREF, typename TPTR>
 inline
 bool List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::operator!=(
-    const typename ListIterator<LPTR, TREF, CTREF, TPTR>& iter ) const
+    const ListIterator& iter ) const
 {
     return _iterList != iter._iterList || _iterPos != iter._iterPos;
 }

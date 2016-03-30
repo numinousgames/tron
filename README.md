@@ -62,6 +62,7 @@ To build for CLion use **cmake .. -DCLION=TRUE**.
 17. Run build all
 
 To build the tests do the following:
+
 1. Complete steps 1-11 above
 2. Click add entry
 3. Enter BUILD_TESTS, select type BOOL, and check value
@@ -94,5 +95,5 @@ the VC++ tool chain.
 
 
 [Standards]: http://bit.ly/1J4g51q
-[Travis Badge]: https://travis-ci.org/numinousgames/tron.svg
+[Travis Badge]: https://travis-ci.org/numinousgames/tron.svg?branch=dev
 [Travis Link]: https://travis-ci.org/numinousgames/tron
