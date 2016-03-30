@@ -80,16 +80,16 @@ set(
     src/engine/memory/stack_guard.cpp
     include/engine/memory/stack_guard.h
     # RENDERING
-    src/engine/rendering/gl_renderer.cpp
-    include/engine/rendering/gl_renderer.h
-    src/engine/rendering/irenderable.cpp
-    include/engine/rendering/irenderable.h
-    src/engine/rendering/irenderer.cpp
-    include/engine/rendering/irenderer.h
+#    src/engine/rendering/gl_renderer.cpp
+#    include/engine/rendering/gl_renderer.h
+#    src/engine/rendering/irenderable.cpp
+#    include/engine/rendering/irenderable.h
+#    src/engine/rendering/irenderer.cpp
+#    include/engine/rendering/irenderer.h
 #    src/engine/rendering/shape.cpp
 #    include/engine/rendering/shape.h
-    src/engine/rendering/window.cpp
-    include/engine/rendering/window.h
+#    src/engine/rendering/window.cpp
+#    include/engine/rendering/window.h
     # UTILITY
     src/engine/utility/hasher.cpp
     include/engine/utility/hasher.h
@@ -100,8 +100,8 @@ set(
     # WORLD
     src/engine/world/itickable.cpp
     include/engine/world/itickable.h
-#    src/engine/world/ngudef.cpp
-#    include/engine/world/ngudef.h
+    src/engine/world/ngudef.cpp
+    include/engine/world/ngudef.h
     src/engine/world/scene.cpp
     include/engine/world/scene.h
 #    src/engine/world/view_port.cpp
