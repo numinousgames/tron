@@ -672,26 +672,26 @@ const TMat4x4<T> TMat4x4<T>::ZERO = TMat4x4<T>( 0 );
 // CONSTRUCTORS
 template <typename T>
 inline
-TMat4x4<T>::TMat4x4() : _value( { Column( 1, 0, 0, 0 ),
-                                  Column( 0, 1, 0, 0 ),
-                                  Column( 0, 0, 1, 0 ),
-                                  Column( 0, 0, 0, 1 ) } )
+TMat4x4<T>::TMat4x4() : _value { Column( 1, 0, 0, 0 ),
+                                 Column( 0, 1, 0, 0 ),
+                                 Column( 0, 0, 1, 0 ),
+                                 Column( 0, 0, 0, 1 ) }
 {
 }
 
 template <typename T>
 inline
-TMat4x4<T>::TMat4x4( const TMat4x4<T>& m ) : _value( { m[0], m[1], m[2], m[3] } )
+TMat4x4<T>::TMat4x4( const TMat4x4<T>& m ) : _value { m[0], m[1], m[2], m[3] }
 {
 }
 
 template <typename T>
 template <typename U>
 inline
-TMat4x4<T>::TMat4x4( const U& s ) : _value( { Column( s, 0, 0, 0 ),
-                                              Column( 0, s, 0, 0 ),
-                                              Column( 0, 0, s, 0 ),
-                                              Column( 0, 0, 0, s ) } )
+TMat4x4<T>::TMat4x4( const U& s ) : _value { Column( s, 0, 0, 0 ),
+                                             Column( 0, s, 0, 0 ),
+                                             Column( 0, 0, s, 0 ),
+                                             Column( 0, 0, 0, s ) }
 {
 }
 
@@ -705,10 +705,10 @@ TMat4x4<T>::TMat4x4( const X1& x1, const X2& x2, const X3& x3, const X4& x4,
                      const Y1& y1, const Y2& y2, const Y3& y3, const Y4& y4,
                      const Z1& z1, const Z2& z2, const Z3& z3, const Z4& z4,
                      const W1& w1, const W2& w2, const W3& w3, const W4& w4 )
-    : _value( { Column( T( x1 ), T( y1 ), T( z1 ), T( w1 ) ),
-                Column( T( x2 ), T( y2 ), T( z2 ), T( w2 ) ),
-                Column( T( x3 ), T( y3 ), T( z3 ), T( w3 ) ),
-                Column( T( x4 ), T( y4 ), T( z4 ), T( w4 ) ) } )
+    : _value { Column( T( x1 ), T( y1 ), T( z1 ), T( w1 ) ),
+               Column( T( x2 ), T( y2 ), T( z2 ), T( w2 ) ),
+               Column( T( x3 ), T( y3 ), T( z3 ), T( w3 ) ),
+               Column( T( x4 ), T( y4 ), T( z4 ), T( w4 ) ) }
 {
 }
 
@@ -717,7 +717,7 @@ template <typename I, typename J, typename K, typename L>
 inline
 TMat4x4<T>::TMat4x4( const TVec4<I>& c1, const TVec4<J>& c2,
                      const TVec4<K>& c3, const TVec4<L>& c4 )
-    : _value( { c1, c2, c3, c4 } )
+    : _value { c1, c2, c3, c4 }
 {
 }
 
@@ -725,10 +725,10 @@ template <typename T>
 template <typename U>
 inline
 TMat4x4<T>::TMat4x4( const TMat2x2<U>& m )
-    : _value( { Column( TVec2<T>( m[0] ), 0, 0 ),
-                Column( TVec2<T>( m[1] ), 0, 0 ),
-                Column( 0, 0, 1, 0 ),
-                Column( 0, 0, 0, 1 ) } )
+    : _value { Column( TVec2<T>( m[0] ), 0, 0 ),
+               Column( TVec2<T>( m[1] ), 0, 0 ),
+               Column( 0, 0, 1, 0 ),
+               Column( 0, 0, 0, 1 ) }
 {
 }
 
@@ -736,10 +736,10 @@ template <typename T>
 template <typename U>
 inline
 TMat4x4<T>::TMat4x4( const TMat3x3<U>& m )
-    : _value( { Column( TVec3<T>( m[0] ), 0 ),
-                Column( TVec3<T>( m[1] ), 0 ),
-                Column( TVec3<T>( m[2] ), 0 ),
-                Column( 0, 0, 0, 1 ) } )
+    : _value { Column( TVec3<T>( m[0] ), 0 ),
+               Column( TVec3<T>( m[1] ), 0 ),
+               Column( TVec3<T>( m[2] ), 0 ),
+               Column( 0, 0, 0, 1 ) }
 {
 }
 
@@ -747,10 +747,10 @@ template <typename T>
 template <typename U>
 inline
 TMat4x4<T>::TMat4x4( const TMat4x4<U>& m )
-    : _value( { Column( m[0] ),
-                Column( m[1] ),
-                Column( m[2] ),
-                Column( m[3] ) } )
+    : _value { Column( m[0] ),
+               Column( m[1] ),
+               Column( m[2] ),
+               Column( m[3] ) }
 {
 }
 
