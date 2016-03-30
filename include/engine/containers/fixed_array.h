@@ -195,9 +195,8 @@ class FixedArray
     /**
      * Wraps a pre-allocated array.
      *
-     * The size must be the number of items in use starting from index 0.
-     * The capacity must be the allocated size of the array.
-     * If capacity is not specified it will be equal to the size.
+     * The size must be the number of items in the array.
+     * This assumes the allocated array is full.
      *
      * The fixed array will not deallocate the data during destruction.
      * If this instance is copied the copy will not reference the original
@@ -206,7 +205,22 @@ class FixedArray
      * If it is moved to a new instance the new instance will reference the
      * wrapped data.
      */
-    static FixedArray<T> wrap( T* data, uint32 size, uint32 capacity = size );
+    static FixedArray<T> wrap( T* data, uint32 size );
+
+    /**
+     * Wraps a pre-allocated array.
+     *
+     * The size must be the number of items in use starting from index 0.
+     * The capacity must be the allocated number of items in the array.
+     *
+     * The fixed array will not deallocate the data during destruction.
+     * If this instance is copied the copy will not reference the original
+     * array. Instead it will allocate it's own copy which it will assume
+     * responsibility for (it will deallocate the copy when appropriate).
+     * If it is moved to a new instance the new instance will reference the
+     * wrapped data.
+     */
+    static FixedArray<T> wrap( T* data, uint32 size, uint32 capacity );
 
     // CONSTRUCTORS
     /**
@@ -441,6 +455,13 @@ template <typename T>
 constexpr uint32 FixedArray<T>::DEFAULT_CAPACITY;
 
 // GLOBAL METHODS
+template <typename T>
+inline
+FixedArray<T> FixedArray<T>::wrap( T* data, uint32 size )
+{
+    return FixedArray<T>::wrap( data, size, size );
+}
+
 template <typename T>
 inline
 FixedArray<T> FixedArray<T>::wrap( T* data, uint32 size, uint32 capacity )
