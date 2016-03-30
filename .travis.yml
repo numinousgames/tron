@@ -1,6 +1,14 @@
+sudo: required
+dist: trusty
 language:
   - cpp
   - python
+
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install cmake -y
+  - sudo apt-get install xorg-dev -y
+  - sudo apt-get install libgl1-mesa-dev -y
 
 compiler:
   - gcc

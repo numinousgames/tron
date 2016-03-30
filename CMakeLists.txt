@@ -100,8 +100,8 @@ set(
     # WORLD
     src/engine/world/itickable.cpp
     include/engine/world/itickable.h
-#    src/engine/world/ngudef.cpp
-#    include/engine/world/ngudef.h
+    src/engine/world/ngudef.cpp
+    include/engine/world/ngudef.h
     src/engine/world/scene.cpp
     include/engine/world/scene.h
 #    src/engine/world/view_port.cpp
