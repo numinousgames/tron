@@ -20,6 +20,231 @@ namespace cntr
 template <typename K, typename V>
 class Map
 {
+  public:
+    // STRUCTURES
+    struct KVPair
+    {
+        K key;
+        V value;
+    };
+
+    // CLASSES
+    /**
+     * Defines a constant iterator for the map.
+     */
+    class ConstIterator
+    {
+      private:
+        // MEMBERS
+        /**
+         * The map key-value pairs that are being iterated.
+         */
+        const DynamicArray<KVPair>* _iterValues;
+
+        /**
+         * The current position in the map.
+         */
+        uint32 _iterIndex;
+
+      public:
+        // CONSTRUCTORS
+        /**
+         * Constructs a new iterator.
+         */
+        ConstIterator();
+
+        /**
+         * Constructs an iterator for the map with the given index.
+         */
+        ConstIterator( const Map<K, V>* map, uint32 index );
+
+        /**
+         * Constructs a copy of the given iterator.
+         */
+        ConstIterator( const ConstIterator& iter );
+
+        /**
+         * Destructs the iterator.
+         */
+        ~ConstIterator();
+
+        // OPERATORS
+        /**
+         * Assigns this as a copy of the other iterator.
+         */
+        ConstIterator& operator=( const ConstIterator& iter );
+
+        /**
+         * Moves to the next item.
+         */
+        ConstIterator& operator++();
+
+        /**
+         * Moves to the next item.
+         */
+        ConstIterator& operator++( int32 );
+
+        /**
+         * Moves to the previous item.
+         */
+        ConstIterator& operator--();
+
+        /**
+         * Moves to the previous item.
+         */
+        ConstIterator& operator--( int32 );
+
+        /**
+         * Gets the element at the current position.
+         */
+        const KVPair& operator*() const;
+
+        /**
+         * Gets the element at the current position.
+         *
+         * The value must not be modified in a way that it's hash code would
+         * change. To do so will cause undefined behavior.
+         */
+        const KVPair* operator->() const;
+
+        /**
+         * Checks if the other iterator is at the same position.
+         */
+        bool operator==( const ConstIterator& iter ) const;
+
+        /**
+         * Checks if the other iterator is not at the same position.
+         */
+        bool operator!=( const ConstIterator& iter ) const;
+    };
+
+    // CONSTRUCTORS
+    /**
+     * Constructs a new map.
+     */
+    Map();
+
+     /**
+      * Constructs a new map with the given intial capacity.
+      */
+    Map( uint32 capacity );
+
+    /**
+     * Constructs a new map with the given hash function.
+     */
+    Map( std::function<uint32( const K& )> hashFunc );
+
+    /**
+     * Constructs a new map with the given initial capacity that uses
+     * the given hash function.
+     */
+    Map( uint32 capacity, std::function<uint32( const K& )> hashFunc );
+
+    /**
+     * Constructs a new map with the given allocators.
+    */
+    Map( mem::IAllocator<KVPair>* pairAlloc, mem::IAllocator<uint32>* intAlloc );
+
+    /**
+     * Constructs a new map with the given allocators and initial capacity.
+    */
+    Map( mem::IAllocator<KVPair>* pairAlloc, mem::IAllocator<uint32>* intAlloc,
+         uint32 capacity );
+
+    /**
+     * Constructs a new map with the given allocators and hash function.
+    */
+    Map( mem::IAllocator<KVPair>* pairAlloc, mem::IAllocator<uint32>* intAlloc,
+         std::function<uint32( const K& )> hashFunc );
+
+    /**
+     * Constructs a new map using the given allocators, initial capacity, and
+     * hash function.
+    */
+     Map( mem::IAllocator<KVPair>* pairAlloc, mem::IAllocator<uint32>* intAlloc,
+          uint32 capacity, std::function<uint32( const K& )> hashFunc );
+
+    /**
+     * Constructs a copy of the given map
+    */
+    Map( const Map<K, V>& map );
+
+    /**
+     * Moves the map to a new instance.
+    */
+    Map( Map<K, V>&& map );
+
+    /**
+     * Destructs the map.
+    */
+    ~Map();
+
+    // OPERATORS
+    /**
+     * Assigns this as a copy of the given map.
+    */
+    Map<K, V>& operator=( const Map<K, V>& map );
+
+    /**
+     * Moves the map data to this instance.
+    */
+    Map<K, V>& operator=( const Map<K, V>&& map );
+
+    // MEMBER FUNCTIONS
+    /**
+     * assigns a copy of the given value to the given key in the map.
+     *
+     * assigns will replace any already existing value associated with the key.
+     */
+    void assign( const K& key, const V& value );
+
+    /**
+     * Sets a copy of the given value to the given key in the map.
+     *
+     * This will replace any already existing value associated with the key.
+     */
+    void assign( K&& key, V&& value );
+
+    /**
+     * Removes the given key and its associated value from the map.
+     */
+    void remove( const K& key );
+
+    /**
+     * Checks if the key exists in the map.
+     */
+    bool hasKey( const K& key ) const;
+
+    /**
+    * Checks if the value exists in the map.
+    */
+    bool hasValue( const V& value ) const;
+
+    /**
+     * Removes all of the items from the map.
+     */
+    void clear();
+
+    /**
+     * Gets the number of items in the map.
+     */
+    uint32 size() const;
+
+    /**
+     * Checks if the map is empty.
+     */
+    bool isEmpty() const;
+
+    /**
+     * Gets an iterator for the map
+     */
+    ConstIterator cbegin() const;
+
+    /**
+     * Gets an iterator for the end of the map.
+     */
+    ConstIterator cend() const;
+
   private:
     // CONSTANTS
     /**
@@ -46,7 +271,7 @@ class Map
     /*
     * Key-Value pair array
     */
-    Dynamic_Array<KVPair> _pairs;
+    DynamicArray<KVPair> _pairs;
 
     /**
      * The bin allocator.
@@ -143,233 +368,7 @@ class Map
      * This does not reset _binsInUse.
      */
     void clearBins();
-
-
-  public:
-    // STRUCTURES
-    struct KVPair
-    {
-        K key;
-        V value;
-    }
-
-    // CLASSES
-    /**
-     * Defines a constant iterator for the map.
-     */
-    class ConstIterator
-    {
-      private:
-        // MEMBERS
-        /**
-         * The map key-value pairs that are being iterated.
-         */
-        const DynamicArray<KVPair>* _iterValues;
-
-        /**
-         * The current position in the map.
-         */
-        uint32 _iterIndex;
-
-      public:
-        // CONSTRUCTORS
-        /**
-         * Constructs a new iterator.
-         */
-        ConstIterator();
-
-        /**
-         * Constructs an iterator for the map with the given index.
-         */
-        ConstIterator( const Map<T>* map, uint32 index );
-
-        /**
-         * Constructs a copy of the given iterator.
-         */
-        ConstIterator( const ConstIterator& iter );
-
-        /**
-         * Destructs the iterator.
-         */
-        ~ConstIterator();
-
-        // OPERATORS
-        /**
-         * Assigns this as a copy of the other iterator.
-         */
-        ConstIterator& operator=( const ConstIterator& iter );
-
-        /**
-         * Moves to the next item.
-         */
-        ConstIterator& operator++();
-
-        /**
-         * Moves to the next item.
-         */
-        ConstIterator& operator++( int32 );
-
-        /**
-         * Moves to the previous item.
-         */
-        ConstIterator& operator--();
-
-        /**
-         * Moves to the previous item.
-         */
-        ConstIterator& operator--( int32 );
-
-        /**
-         * Gets the element at the current position.
-         */
-        const T& operator*() const;
-
-        /**
-         * Gets the element at the current position.
-         *
-         * The value must not be modified in a way that it's hash code would
-         * change. To do so will cause undefined behavior.
-         */
-        const T* operator->() const;
-
-        /**
-         * Checks if the other iterator is at the same position.
-         */
-        bool operator==( const ConstIterator& iter ) const;
-
-        /**
-         * Checks if the other iterator is not at the same position.
-         */
-        bool operator!=( const ConstIterator& iter ) const;
-    };
-
-    // CONSTRUCTORS
-    /**
-     * Constructs a new map.
-     */
-    Map();
-
-     /**
-      * Constructs a new map with the given intial capacity.
-      */
-    Map( uint32 capacity );
-
-    /**
-     * Constructs a new map with the given hash function.
-     */
-    Map( std::function<uint32( const K& )> hashFunc );
-
-    /**
-     * Constructs a new map with the given initial capacity that uses
-     * the given hash function.
-     */
-    Map( uint32 capacity, std::function<uint32( const K& )> hashFunc );
-
-    /**
-     * Constructs a new map with the given allocators.
-    */
-    Map( mem::IAllocator<KVPair>* pairAlloc, mem::IAllocator<uint32>* intAlloc );
-
-    /**
-     * Constructs a new map with the given allocators and initial capacity.
-    */
-    Map( mem::IAllocator<KVPair>* pairAlloc, mem::IAllocator<uint32>* intAlloc,
-         uint32 capacity );
-
-    /**
-     * Constructs a new map with the given allocators and hash function.
-    */
-    Map( mem::IAllocator<KVPair>* pairAlloc, mem::IAllocator<uint32>* intAlloc,
-         std::function<uint32( const K& )> hashFunc );
-
-    /**
-     * Constructs a new map using the given allocators, initial capacity, and
-     * hash function.
-    */
-     Map( mem::IAllocator<KVPair>* pairAlloc, mem::IAllocator<uint32* intAlloc,
-          uint32 capacity, std::function<uint32( const K& )> hashFunc );
-
-    /**
-     * Constructs a copy of the given map
-    */
-    Map( const Map<K, V>& map );
-
-    /**
-     * Moves the map to a new instance.
-    */
-    Map( Map<K, V>&& map );
-
-    /**
-     * Destructs the map.
-    */
-    ~Map();
-
-    // OPERATORS
-    /**
-     * Assigns this as a copy of the given map.
-    */
-    Map<K, V>& operator=( const Map<K, V>& map );
-
-    /**
-     * Moves the map data to this instance.
-    */
-    Map<K, V>& operator=( const Map<K, V>&& map );
-
-    // MEMBER FUNCTIONS
-    /**
-     * assigns a copy of the given value to the given key in the map.
-     *
-     * assigns will replace any already existing value associated with the key.
-     */
-    void assign( const K& key, const V& value );
-
-    /**
-     * Sets a copy of the given value to the given key in the map.
-     *
-     * This will replace any already existing value associated with the key.
-     */
-    void assign( K&& key, V&& value );
-
-    /**
-     * Removes the given key and its associated value from the map.
-     */
-    void remove( const K& key );
-
-    /**
-     * Checks if the key exists in the map.
-     */
-    bool hasKey( const K& key ) const;
-
-    /**
-    * Checks if the value exists in the map.
-    */
-    bool hasValue( const V& value ) const;
-
-    /**
-     * Removes all of the items from the map.
-     */
-    void clear();
-
-    /**
-     * Gets the number of items in the map.
-     */
-    uint32 size() const;
-
-    /**
-     * Checks if the map is empty.
-     */
-    bool isEmpty() const;
-
-    /**
-     * Gets an iterator for the map
-     */
-    ConstIterator cbegin() const;
-
-    /**
-     * Gets an iterator for the end of the map.
-     */
-    ConstIterator cend() const;
-}
+};
 
 // CONSTANTS
 template<typename K, typename V>
