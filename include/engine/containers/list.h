@@ -1125,9 +1125,9 @@ List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::~ListIterator()
 template <typename T>
 template <typename LPTR, typename TREF, typename CTREF, typename TPTR>
 inline
-List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>&
+typename List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>&
 List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::operator=(
-    const List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>& iter )
+    const typename List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>& iter )
 {
     _iterList = iter._iterList;
     _iterIndex = iter._iterIndex;
@@ -1139,7 +1139,7 @@ List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::operator=(
 template <typename T>
 template <typename LPTR, typename TREF, typename CTREF, typename TPTR>
 inline
-List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>&
+typename List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>&
 List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::operator++()
 {
     _iterIndex = _iterList->_nodes[_iterIndex].next;
@@ -1151,7 +1151,7 @@ List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::operator++()
 template <typename T>
 template <typename LPTR, typename TREF, typename CTREF, typename TPTR>
 inline
-List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>&
+typename List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>&
 List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::operator++( int32 )
 {
     _iterIndex = _iterList->_nodes[_iterIndex].next;
@@ -1163,7 +1163,7 @@ List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::operator++( int32 )
 template <typename T>
 template <typename LPTR, typename TREF, typename CTREF, typename TPTR>
 inline
-List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>&
+typename List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>&
 List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::operator--()
 {
     _iterIndex = _iterList->_nodes[_iterIndex].prev;
@@ -1175,7 +1175,7 @@ List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::operator--()
 template <typename T>
 template <typename LPTR, typename TREF, typename CTREF, typename TPTR>
 inline
-List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>&
+typename List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>&
 List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::operator--( int32 )
 {
     _iterIndex = _iterList->_nodes[_iterIndex].prev;
@@ -1220,7 +1220,7 @@ template <typename T>
 template <typename LPTR, typename TREF, typename CTREF, typename TPTR>
 inline
 bool List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::operator==(
-    const ListIterator<LPTR, TREF, CTREF, TPTR>& iter ) const
+    const typename ListIterator<LPTR, TREF, CTREF, TPTR>& iter ) const
 {
     return _iterList == iter._iterList && _iterPos == iter._iterPos;
 }
@@ -1229,7 +1229,7 @@ template <typename T>
 template <typename LPTR, typename TREF, typename CTREF, typename TPTR>
 inline
 bool List<T>::ListIterator<LPTR, TREF, CTREF, TPTR>::operator!=(
-    const ListIterator<LPTR, TREF, CTREF, TPTR>& iter ) const
+    const typename ListIterator<LPTR, TREF, CTREF, TPTR>& iter ) const
 {
     return _iterList != iter._iterList || _iterPos != iter._iterPos;
 }

@@ -31,10 +31,12 @@ confirmed.
 
 1. Clone the repository (git clone https://github.com/numinousgames/tron.git)
 2. Navigate to the tron folder (the project root)
-3. mkdir build
-4. cd build
-5. Call **cmake..**
-6. Call **make**
+3. Run **git submodule init** (in the tron folder)
+4. Run **git submodule update** (in the tron folder)
+5. mkdir build
+6. cd build
+7. Call **cmake..**
+8. Call **make**
 
 To build the unit tests call **cmake .. -DBUILD_TESTS=ON**.
 To build for CLion use **cmake .. -DCLION=TRUE**.
@@ -43,19 +45,36 @@ To build for CLion use **cmake .. -DCLION=TRUE**.
 
 1. Clone the repository (git clone https://github.com/numinousgames/tron.git)
 2. Navigate to the tron folder (the project root)
-3. Create a new folder named build
-4. Open CMake GUI
-5. Set the source folder to the tron folder (the project root)
-6. Set the build folder to the torn/build folder you created in step 3
-7. Press configure
-8. Select Visual Studio 14 2015 (leave default compilers selected)
-9. Click finish (see common errors below on failure)
-10. Press generate
-11. Open Visual Studio
-12. Select File > Open > Solution
-13. Navigate to the tron/build folder
-14. Select the generated tron.sln file
-15. Run build all
+3. Run **git submodule init** (in the tron folder)
+4. Run **git submodule update** (in the tron folder)
+5. Create a new folder named build
+6. Open CMake GUI
+7. Set the source folder to the tron folder (the project root)
+8. Set the build folder to the torn/build folder you created in step 3
+9. Press configure
+10. Select Visual Studio 14 2015 (leave default compilers selected)
+11. Click finish (see common errors below on failure)
+12. Press generate
+13. Open Visual Studio
+14. Select File > Open > Solution
+15. Navigate to the tron/build folder
+16. Select the generated tron.sln file
+17. Run build all
+
+To build the tests do the following:
+1. Complete steps 1-11 above
+2. Click add entry
+3. Enter BUILD_TESTS, select type BOOL, and check value
+4. Check the BUILD_SHARED_LIBS option
+5. Press generate
+6. Open Visual Studio
+7. Select File > Open > Solution
+8. Navigate to the tron/build folder
+9. Select the generated tron.sln File
+10. Build the project gtest_main
+11. Navigate to the tron/build/ext/googletest/googletest/Debug
+12. Copy gtest.dll and gtest_main.dll to tron/build/Debug
+13. Build the project all_tests
 
 The application can be run through visual studio by changing the startup 
 project in the Solution settings to tron.
