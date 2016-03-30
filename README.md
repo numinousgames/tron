@@ -62,6 +62,7 @@ To build for CLion use **cmake .. -DCLION=TRUE**.
 17. Run build all
 
 To build the tests do the following:
+
 1. Complete steps 1-11 above
 2. Click add entry
 3. Enter BUILD_TESTS, select type BOOL, and check value
