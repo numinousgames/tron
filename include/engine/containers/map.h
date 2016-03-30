@@ -311,7 +311,7 @@ class Map
     Map<K, V>& operator=( const Map<K, V>& map );
 
     /**
-     * Moves the set data to this instance.
+     * Moves the map data to this instance.
     */
     Map<K, V>& operator=( const Map<K, V>&& map );
 
@@ -461,7 +461,7 @@ inline
 Map<K, V>::Map( const Map<K, V>& map )
     : _binAlloc( map._binAlloc ), _pairs( map._pairs ),
       _hashFunc( map._hashFunc ), _bins( nullptr ),
-      _binsInUse( map._binsInUse ), _binCount( set._binCount )
+      _binsInUse( map._binsInUse ), _binCount( map._binCount )
 {
     _bins = _binAlloc.get( _binCount );
     mem::MemoryUtils::copy( _bins, map._bins, _binCount );
@@ -539,7 +539,7 @@ Map<K, V>& Map<K, V>::operator=( const Map<K, V>& map )
     _bins = _binAlloc.get( _binCount );
     _binCount = map._binCount;
     _binsInUse = map._binsInUse;
-    mem::MemoryUtils::copy( _bins, set._bins, _binCount );
+    mem::MemoryUtils::copy( _bins, map._bins, _binCount );
 
     return *this;
 }
@@ -749,7 +749,7 @@ inline
 void Map<K, V>::clear()
 {
     _pairs.clear();
-    mem::MemoryUtils::set( _bins, BIN_EMPTY, _binCount );
+    mem::MemoryUtils::map( _bins, BIN_EMPTY, _binCount );
     _binsInUse = 0;
 }
 
@@ -874,7 +874,7 @@ template <typename K, typename V>
 inline
 void Map<K, V>::clearBins()
 {
-    mem::MemoryUtils::set( _bins, BIN_EMPTY, _binCount );
+    mem::MemoryUtils::map( _bins, BIN_EMPTY, _binCount );
 }
 
 
